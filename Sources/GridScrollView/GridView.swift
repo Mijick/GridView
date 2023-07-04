@@ -73,26 +73,13 @@ private extension GridView {
 
         let position = heightMatrix.getPosition(index)
 
+
+        let spacing = position.row.floatValue * verticalSpacing
+
+
         //heightMatrix.printuj()
 
-        return -heightMatrix.getColumnHeight(upTo: position.row, column: position.column)
-
-
-
-
-
-
-
-
-
-
-
-
-
-        return -position.row.floatValue * 300
-
-
-
+        return -heightMatrix.getColumnHeight(upTo: position.row, column: position.column) - spacing
 
     }
     func update(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
