@@ -28,7 +28,7 @@ public struct GridView: View {
                         createItem(index, .random, .random(index))
 
 
-                        
+
                             .alignmentGuide(.top) { dimensions in
                                 let itemHeight = dimensions.height
                                 let itemsHeight = calculateItemsHeight(upTo: index)
@@ -65,6 +65,15 @@ public struct GridView: View {
     }
 }
 
+// MARK: - Vertical Values
+private extension GridView {
+    func updateItemHeights(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
+        itemHeights.updateValue(itemHeight, forKey: index)
+    }}
+    func updateContentHeight(_ currentHeight: CGFloat, _ itemHeight: CGFloat) { DispatchQueue.main.async {
+        contentHeight = max(contentHeight, currentHeight + itemHeight)
+    }}
+}
 private extension GridView {
     func calculateItemsHeight(upTo index: Int) -> CGFloat {
         itemHeights
@@ -76,37 +85,17 @@ private extension GridView {
         let paddingValue = getVerticalPaddingValue(index)
         return paddingValue + itemsHeight
     }
-
-
-
-    func updateItemHeights(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
-        itemHeights.updateValue(itemHeight, forKey: index)
-    }}
-    func updateContentHeight(_ currentHeight: CGFloat, _ itemHeight: CGFloat) { DispatchQueue.main.async {
-        contentHeight = max(contentHeight, currentHeight + itemHeight)
-    }}
 }
-
 private extension GridView {
-    func getRowNumber(_ index: Int) -> Int { index / numberOfColumns }
     func getVerticalPaddingValue(_ index: Int) -> CGFloat {
         let rowNumber = getRowNumber(index).floatValue
         return rowNumber * verticalPadding
     }
+    func getRowNumber(_ index: Int) -> Int { index / numberOfColumns }
+}
 
-
-
-
-
-    //func updateContentHeight(_)
-
-
-
-
-
-
-
-
+// MARK: - Horizontal Values
+private extension GridView {
     func calculateItemWidth(_ screenWidth: CGFloat) -> CGFloat {
         let numberOfColumns = CGFloat(numberOfColumns)
         let b = (numberOfColumns - 1) * horizontalPadding
@@ -121,16 +110,6 @@ private extension GridView {
 
         return leadingValue - a * (calculateItemWidth(screenWidth) + horizontalPadding)
     }
-
-
-
-
-
-
-}
-
-private extension GridView {
-
 }
 
 private extension GridView {
