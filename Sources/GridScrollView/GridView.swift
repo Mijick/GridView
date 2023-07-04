@@ -94,10 +94,11 @@ private extension GridView {
 
         let ab = calculateItemWidth(availableWidth)
 
-        print(ab / a, index)
+
+        let spacing = horizontalSpacing * (a - 1)
 
 
-        return -ab * a
+        return -ab * a - spacing
     }
 
 
