@@ -20,21 +20,33 @@ public struct GridView: View {
 
 
     public init() {}
-    public var body: some View {
-        ScrollView {
-            GeometryReader { reader in
-                ZStack(alignment: .topLeading) {
-                    ForEach(0..<numberOfItems, id: \.self) { index in
-                        createItem(index, .random, .random(index))
-                            .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
-                            .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
-                            .frame(width: calculateItemWidth(reader.size.width))
-                    }
-                }
+    public var body: some View { ScrollView(content: createContent) }
+}
+
+private extension GridView {
+    func createContent() -> some View {
+        GeometryReader { reader in
+            ZStack(alignment: .topLeading) {
+                ForEach(0..<numberOfItems, id: \.self) { createItem($0, reader) }
             }
-            .padding(.horizontal, 28)
-            .frame(height: contentHeight)
-        }
+        }.frame(height: contentHeight)
+    }
+}
+private extension GridView {
+    func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
+        Rectangle()
+            .fill(Color.random)
+            .overlay(Text("\(index)"))
+            .frame(height: .random(index))
+
+
+
+
+
+            .frame(maxWidth: .infinity)
+            .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
+            .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
+            .frame(width: calculateItemWidth(reader.size.width))
     }
 }
 
@@ -108,10 +120,6 @@ private extension GridView {
     func getColumnNumber(_ index: Int) -> Int { index % numberOfColumns }
 }
 
-private extension GridView {
-
-}
-
 
 
 
@@ -124,63 +132,4 @@ fileprivate extension Color {
 }
 fileprivate extension CGFloat {
     static func random(_ index: Int) -> CGFloat { [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2] }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-private extension GridView {
-    func createScrollView() -> some View {
-        ScrollView(content: createContent)
-    }
-}
-
-private extension GridView {
-    func createContent() -> some View { GeometryReader { reader in
-        ZStack(alignment: .topLeading) {
-            //ForEach(0..<numberOfItems, id: \.self)
-        }
-    }}
-}
-
-private extension GridView {
-    func createItem(_ index: Int, _ contentSize: CGSize) {
-
-    }
-
-}
-
-
-
-
-
-
-
-
-
-private extension GridView {
-    func createItem(_ index: Int, _ color: Color, _ height: CGFloat) -> some View {
-        Rectangle()
-            .fill(color)
-            .frame(height: height).frame(maxWidth: .infinity)
-            .overlay(Text("\(index)"))
-    }
-}
-
-
-
-
-
-extension Int {
-    var doubleValue: Double { Double(self) }
-    var floatValue: CGFloat { CGFloat(self) }
 }
