@@ -29,7 +29,7 @@ public struct GridView: View {
             GeometryReader { reader in
                 ZStack(alignment: .topLeading) {
                     ForEach(0..<numberOfItems, id: \.self) { index in
-                        aaaa(index)
+                        createItem(index, .random, .random(index))
 
                             .alignmentGuide(.top) { d in
                                 height.updateValue(d.height, forKey: index)
@@ -117,12 +117,24 @@ private extension GridView {
 
 
 private extension GridView {
-    func aaaa(_ index: Int) -> some View {
+    func createItem(_ index: Int, _ color: Color, _ height: CGFloat) -> some View {
         Rectangle()
-            .fill(Color(.init(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1)))
-            .frame(height: [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2])
-            .frame(maxWidth: .infinity)
-            .border(Color.red)
+            .fill(color)
+            .frame(height: height).frame(maxWidth: .infinity)
             .overlay(Text("\(index)"))
     }
+}
+
+
+
+
+
+
+
+
+fileprivate extension Color {
+    static let random: Color = .init(.init(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1))
+}
+fileprivate extension CGFloat {
+    static func random(_ index: Int) -> CGFloat { [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2] }
 }
