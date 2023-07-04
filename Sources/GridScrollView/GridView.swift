@@ -27,19 +27,22 @@ public struct GridView: View {
                     ForEach(0..<numberOfItems, id: \.self) { index in
                         createItem(index, .random, .random(index))
 
-                            .alignmentGuide(.top) { d in
-                                updateItemHeights(index, d.height)
 
+                        
+                            .alignmentGuide(.top) { dimensions in
+                                let itemHeight = dimensions.height
+                                let itemsHeight = calculateItemsHeight(upTo: index)
+                                let contentHeight = calculateContentHeight(upTo: index, itemsHeight)
 
-                                DispatchQueue.main.async { contentHeight = max(
-                                    contentHeight,
-                                    abs(d[VerticalAlignment.top] - calculateUpToIndex(itemHeights, index)) + d.height
-                                ) }
+                                updateItemHeights(index, itemHeight)
+                                updateContentHeight(contentHeight, itemHeight)
 
-
-
-                                return d[VerticalAlignment.top] - calculateUpToIndex(itemHeights, index) - CGFloat(index / numberOfColumns) * verticalPadding
+                                return -contentHeight
                             }
+
+
+
+
                             .alignmentGuide(.leading) { d in
 
 
@@ -57,22 +60,30 @@ public struct GridView: View {
                 }
             }
             .padding(.horizontal, 28)
-
-            // trzeba dodać verticalPadding
             .frame(height: contentHeight)
         }
     }
 }
 
 private extension GridView {
-    func updateItemHeights(_ index: Int, _ height: CGFloat) { DispatchQueue.main.async {
-        itemHeights.updateValue(height, forKey: index)
+    func calculateItemsHeight(upTo index: Int) -> CGFloat {
+        itemHeights
+            .filter { $0.key < index }
+            .filter { (index - $0.key) % numberOfColumns == 0 }
+            .reduce(0) { $0 + $1.value }
+    }
+    func calculateContentHeight(upTo index: Int, _ itemsHeight: CGFloat) -> CGFloat {
+        let paddingValue = getVerticalPaddingValue(index)
+        return paddingValue + itemsHeight
+    }
+
+
+
+    func updateItemHeights(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
+        itemHeights.updateValue(itemHeight, forKey: index)
     }}
-    func updateContentHeight(_ index: Int) { DispatchQueue.main.async {
-
-
-
-
+    func updateContentHeight(_ currentHeight: CGFloat, _ itemHeight: CGFloat) { DispatchQueue.main.async {
+        contentHeight = max(contentHeight, currentHeight + itemHeight)
     }}
 }
 
@@ -115,13 +126,7 @@ private extension GridView {
 
 
 
-    func calculateUpToIndex(_ array: [Int: CGFloat], _ index: Int) -> CGFloat {
-        let filteredItems = array.filter { $0.key < index }
-        return filteredItems.reduce(0) {
-            let value = (index - $1.key) % numberOfColumns == 0 ? $1.value : 0
-            return $0 + value
-        }
-    }
+
 }
 
 private extension GridView {
