@@ -47,6 +47,7 @@ private extension GridView {
             .fill(Color.random)
             .overlay(Text("\(index)"))
             .frame(height: .random(index))
+            .border(Color.red)
 
 
 
@@ -54,7 +55,7 @@ private extension GridView {
 
             .frame(maxWidth: .infinity)
             .alignmentGuide(.top) { handleTop(index, $0, reader) }
-            .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
+            .alignmentGuide(.leading) { handleLeading(index, $0, reader) }
             .frame(width: calculateItemWidth(reader.size.width))
     }
 }
@@ -70,17 +71,25 @@ private extension GridView {
         update(index, itemHeight)
 
 
+        let position = heightMatrix.getPosition(index)
+
+        //heightMatrix.printuj()
+
+        return -heightMatrix.getColumnHeight(upTo: position.row, column: position.column)
 
 
 
 
 
-        heightMatrix.printuj()
 
 
 
 
-        return 0
+
+
+
+
+        return -position.row.floatValue * 300
 
 
 
@@ -93,10 +102,15 @@ private extension GridView {
 
 
     func handleLeading(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+        let availableWidth = reader.size.width
+        let a = heightMatrix.getPosition(index).column.floatValue + 1
+
+        let ab = calculateItemWidth(availableWidth)
+
+        print(ab / a, index)
 
 
-
-        return 0
+        return -ab * a
     }
 
 
@@ -204,30 +218,30 @@ enum Sorting { case ordered, fill }
 
 struct Matrix {
     private var items: [[CGFloat]]
-    private var usedIndexes: [Int] = []
+    private var indexes: [Int: (row: Int, column: Int)] = [:]
 
 
     init(columns: Int) { items = [.init(repeating: 0, count: columns)] }
 }
 extension Matrix {
     mutating func insert(_ item: CGFloat, itemIndex: Int, column: Int) {
-        guard !usedIndexes.contains(itemIndex) else { return }
-
-        usedIndexes.append(itemIndex)
+        guard indexes[itemIndex] == nil else { return }
 
         if let index = items.firstIndex(where: { $0[column] == 0 }) {
+            indexes.updateValue((index, column), forKey: itemIndex)
             items[index][column] = item
             return
         }
 
         items.append(.init(repeating: 0, count: numberOfColumns))
 
+        indexes.updateValue((items.count - 1, column), forKey: itemIndex)
         lastRow[column] = item
 
     }
 }
 extension Matrix {
-    
+    func getPosition(_ index: Int) -> (row: Int, column: Int) { indexes[index] ?? (0, 0) }
 
 
 
@@ -243,6 +257,20 @@ extension Matrix {
 
         return array
     }
+
+
+    func getColumnHeight(upTo row: Int, column: Int) -> CGFloat {
+        var uuu = 0.0
+
+        for index in 0..<row {
+            let a = items[index][column]
+            uuu += a
+        }
+
+
+        return uuu
+    }
+
 
 
     func printuj() {
