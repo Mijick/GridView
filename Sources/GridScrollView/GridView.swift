@@ -26,31 +26,8 @@ public struct GridView: View {
                 ZStack(alignment: .topLeading) {
                     ForEach(0..<numberOfItems, id: \.self) { index in
                         createItem(index, .random, .random(index))
-
-
-
-                            .alignmentGuide(.top) { dimensions in
-                                let itemHeight = dimensions.height
-                                let itemsHeight = calculateItemsHeight(upTo: index)
-                                let contentHeight = calculateContentHeight(upTo: index, itemsHeight)
-
-                                updateItemHeights(index, itemHeight)
-                                updateContentHeight(contentHeight, itemHeight)
-
-                                return -contentHeight
-                            }
-
-
-
-
-                            .alignmentGuide(.leading) { _ in
-                                let availableWidth = reader.size.width
-                                let itemPadding = calculateItemLeadingPadding(index, availableWidth)
-
-                                return itemPadding
-                            }
-
-
+                            .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
+                            .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
                             .frame(width: calculateItemWidth(reader.size.width))
                     }
                 }
@@ -58,6 +35,25 @@ public struct GridView: View {
             .padding(.horizontal, 28)
             .frame(height: contentHeight)
         }
+    }
+}
+
+// MARK: - Alignment Guides
+private extension GridView {
+    func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+        let itemHeight = dimensions.height
+        let itemsHeight = calculateItemsHeight(upTo: index)
+        let contentHeight = calculateContentHeight(upTo: index, itemsHeight)
+
+        updateItemHeights(index, itemHeight)
+        updateContentHeight(contentHeight, itemHeight)
+
+        return -contentHeight
+    }
+    func handleLeadingAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+        let availableWidth = reader.size.width
+        let itemPadding = calculateItemLeadingPadding(index, availableWidth)
+        return itemPadding
     }
 }
 
