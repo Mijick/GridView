@@ -11,8 +11,8 @@
 import SwiftUI
 
 public struct GridView: View {
-    var verticalPadding: CGFloat = 8
-    var horizontalPadding: CGFloat = 8
+    var verticalSpacing: CGFloat = 8
+    var horizontalSpacing: CGFloat = 8
     var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
     @State private var itemHeights: [Int: CGFloat] = [:]
@@ -89,7 +89,7 @@ private extension GridView {
 private extension GridView {
     func getVerticalSpacingValue(_ index: Int) -> CGFloat {
         let rowNumber = getRowNumber(index).floatValue
-        return rowNumber * verticalPadding
+        return rowNumber * verticalSpacing
     }
     func getRowNumber(_ index: Int) -> Int { index / numberOfColumns }
 }
@@ -106,28 +106,25 @@ private extension GridView {
 
 
 
-    func calculateHorizontalSpacing(_ index: Int, _ screenWidth: CGFloat) -> CGFloat {
-        let a = CGFloat(index % numberOfColumns)
+    func calculateHorizontalSpacing(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
+        let columnNumber = getColumnNumber(index)
+        let itemWidth = calculateItemWidth(availableWidth)
 
 
-        return -a * (calculateItemWidth(screenWidth) + horizontalPadding)
+        return -columnNumber.floatValue * (itemWidth + horizontalSpacing)
     }
 }
 private extension GridView {
     func getHorizontalSpacingTotalValue() -> CGFloat {
         let numberOfSpaces = numberOfColumns - 1
-        return numberOfSpaces.floatValue / numberOfColumns.floatValue
+        return numberOfSpaces.floatValue * horizontalSpacing
     }
+    func getColumnNumber(_ index: Int) -> Int { index % numberOfColumns }
 }
 
 private extension GridView {
 
 }
-
-
-
-
-
 
 
 
