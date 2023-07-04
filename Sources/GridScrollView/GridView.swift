@@ -15,8 +15,8 @@ public struct GridView: View {
     var horizontalPadding: CGFloat = 8
     var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
-    @State private var contentHeight: CGFloat = 0
     @State private var itemHeights: [Int: CGFloat] = [:]
+    @State private var contentHeight: CGFloat = 0
 
 
     public init() {}
@@ -82,12 +82,12 @@ private extension GridView {
             .reduce(0) { $0 + $1.value }
     }
     func calculateContentHeight(upTo index: Int, _ itemsHeight: CGFloat) -> CGFloat {
-        let paddingValue = getVerticalPaddingValue(index)
-        return paddingValue + itemsHeight
+        let spacingValue = getVerticalSpacingValue(index)
+        return spacingValue + itemsHeight
     }
 }
 private extension GridView {
-    func getVerticalPaddingValue(_ index: Int) -> CGFloat {
+    func getVerticalSpacingValue(_ index: Int) -> CGFloat {
         let rowNumber = getRowNumber(index).floatValue
         return rowNumber * verticalPadding
     }
@@ -96,11 +96,10 @@ private extension GridView {
 
 // MARK: - Horizontal Values
 private extension GridView {
-    func calculateItemWidth(_ screenWidth: CGFloat) -> CGFloat {
-        let numberOfColumns = CGFloat(numberOfColumns)
-        let b = (numberOfColumns - 1) * horizontalPadding
-        let a = (screenWidth - b) / numberOfColumns
-        return a
+    func calculateItemWidth(_ availableWidth: CGFloat) -> CGFloat {
+        let totalSpacingValue = getHorizontalSpacingTotalValue()
+        let itemsWidth = availableWidth - totalSpacingValue
+        return itemsWidth / numberOfColumns.floatValue
     }
 
     func calculateHorizontalSpacing(_ index: Int, _ viewDimension: ViewDimensions, _ screenWidth: CGFloat) -> CGFloat {
@@ -111,9 +110,11 @@ private extension GridView {
         return leadingValue - a * (calculateItemWidth(screenWidth) + horizontalPadding)
     }
 }
-
 private extension GridView {
-
+    func getHorizontalSpacingTotalValue() -> CGFloat {
+        let numberOfSpaces = numberOfColumns - 1
+        return numberOfSpaces.floatValue / numberOfColumns.floatValue
+    }
 }
 
 private extension GridView {
