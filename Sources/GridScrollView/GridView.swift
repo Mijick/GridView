@@ -44,15 +44,11 @@ public struct GridView: View {
 
 
                             .alignmentGuide(.leading) { _ in
+                                let availableWidth = reader.size.width
+                                let itemPadding = calculateItemLeadingPadding(index, availableWidth)
 
-
-
-
-                                return calculateHorizontalSpacing(index, reader.size.width)
+                                return itemPadding
                             }
-
-
-
 
 
                             .frame(width: calculateItemWidth(reader.size.width))
@@ -101,17 +97,11 @@ private extension GridView {
         let itemsWidth = availableWidth - totalSpacingValue
         return itemsWidth / numberOfColumns.floatValue
     }
-
-
-
-
-
-    func calculateHorizontalSpacing(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
+    func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
         let columnNumber = getColumnNumber(index)
         let itemWidth = calculateItemWidth(availableWidth)
-
-
-        return -columnNumber.floatValue * (itemWidth + horizontalSpacing)
+        let totalWidth = itemWidth + horizontalSpacing
+        return -columnNumber.floatValue * totalWidth
     }
 }
 private extension GridView {
