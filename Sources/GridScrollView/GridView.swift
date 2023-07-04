@@ -15,8 +15,17 @@ public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
+    var sorting: Sorting = .ordered
     @State private var itemHeights: [Int: CGFloat] = [:]
     @State private var contentHeight: CGFloat = 0
+
+
+
+
+    @State private var heightMatrix: Matrix = .init(columns: 3)
+
+
+
 
 
     public init() {}
@@ -44,7 +53,7 @@ private extension GridView {
 
 
             .frame(maxWidth: .infinity)
-            .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
+            .alignmentGuide(.top) { handleTop(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
             .frame(width: calculateItemWidth(reader.size.width))
     }
@@ -52,6 +61,51 @@ private extension GridView {
 
 // MARK: - Alignment Guides
 private extension GridView {
+    func handleTop(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+        let itemHeight = dimensions.height
+
+
+
+
+        update(index, itemHeight)
+
+
+
+
+
+
+
+        heightMatrix.printuj()
+
+
+
+
+        return 0
+
+
+
+
+    }
+    func update(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
+        let min = heightMatrix.getColumnHeights().enumerated().min(by: { $0.element < $1.element })
+        heightMatrix.insert(itemHeight, itemIndex: index, column: min?.offset ?? 0)
+    }}
+
+
+    func handleLeading(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+
+
+
+        return 0
+    }
+
+
+
+
+
+
+
+
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let itemHeight = dimensions.height
         let itemsHeight = calculateItemsHeight(upTo: index)
@@ -132,4 +186,83 @@ fileprivate extension Color {
 }
 fileprivate extension CGFloat {
     static func random(_ index: Int) -> CGFloat { [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2] }
+}
+
+
+
+
+
+enum Sorting { case ordered, fill }
+
+
+
+
+
+
+
+
+
+struct Matrix {
+    private var items: [[CGFloat]]
+    private var usedIndexes: [Int] = []
+
+
+    init(columns: Int) { items = [.init(repeating: 0, count: columns)] }
+}
+extension Matrix {
+    mutating func insert(_ item: CGFloat, itemIndex: Int, column: Int) {
+        guard !usedIndexes.contains(itemIndex) else { return }
+
+        usedIndexes.append(itemIndex)
+
+        if let index = items.firstIndex(where: { $0[column] == 0 }) {
+            items[index][column] = item
+            return
+        }
+
+        items.append(.init(repeating: 0, count: numberOfColumns))
+
+        lastRow[column] = item
+
+    }
+}
+extension Matrix {
+    
+
+
+
+
+    func getColumnHeights() -> [CGFloat] {
+        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+
+        for columnIndex in 0..<numberOfColumns {
+            for rowIndex in 0..<items.count {
+                array[columnIndex] += items[rowIndex][columnIndex]
+            }
+        }
+
+        return array
+    }
+
+
+    func printuj() {
+        print("Matrix is:")
+        for x in 0..<items.count {
+            for y in 0..<items[0].count {
+                print(items[x][y], terminator:" ")
+            }
+            print("\n")
+        }
+    }
+}
+
+private extension Matrix {
+    var numberOfColumns: Int { items.first?.count ?? 0 }
+
+
+
+    var lastRow: [CGFloat] {
+        get { items.last ?? [] }
+        set { items[items.count - 1] = newValue }
+    }
 }
