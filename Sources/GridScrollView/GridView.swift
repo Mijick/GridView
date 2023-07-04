@@ -38,7 +38,7 @@ private extension GridView {
             ZStack(alignment: .topLeading) {
                 ForEach(0..<numberOfItems, id: \.self) { createItem($0, reader) }
             }
-        }.frame(height: contentHeight)
+        }.frame(height: calculateContentHeight())
     }
 }
 private extension GridView {
@@ -100,6 +100,10 @@ private extension GridView {
 
         return -ab * a - spacing
     }
+
+
+    // dodaj jeszcze kurwiu spacing value
+    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnHeights().max() ?? 0 }
 
 
 
