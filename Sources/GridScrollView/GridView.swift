@@ -102,8 +102,12 @@ private extension GridView {
     }
 
 
-    // dodaj jeszcze kurwiu spacing value
-    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnHeights().max() ?? 0 }
+    func calculateContentHeight() -> CGFloat {
+        let a = heightMatrix.getColumnHeights().enumerated().max(by: { $0.element < $1.element })
+        let spacing = heightMatrix.getMaxHeightRow().floatValue * verticalSpacing
+        let height = a?.element ?? 0
+        return height + spacing
+    }
 
 
 
@@ -248,6 +252,18 @@ extension Matrix {
         }
 
         return array
+    }
+
+    func getMaxHeightRow() -> Int {
+        let column = getColumnHeights().enumerated().max(by: { $0.element > $1.element })?.offset ?? 0
+
+
+        let row = items.lastIndex(where: { $0[column] == 0 }) ?? items.count
+
+
+
+
+        return max(0, row - 1)
     }
 
 
