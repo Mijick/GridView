@@ -11,24 +11,31 @@
 import XCTest
 @testable import GridScrollView
 
-final class Matrix_Test: XCTestCase {}
+final class Matrix_Test: XCTestCase {
+    var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)
+}
 
 // MARK: - Inserting
 extension Matrix_Test {
     func testInsertValue_WhenMatrixIsEmpty() {
-        var matrix = Matrix(columns: 3, itemsSpacing: 8, policy: .fill)
         matrix.insert(.init(index: 0, value: 100))
 
         let result: [[CGFloat]] = matrix.items.toValues()
-        let expectedResult: [[CGFloat]] = [[100, 0, 0]]
+        let expectedResult: [[CGFloat]] = [[100, 0, 0, 0]]
 
         XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_WhenItemWithIndexIsPresent_ShouldNotInsertItem() {
+        matrix.insert(.init(index: 0, value: 100))
+        matrix.insert(.init(index: 0, value: 200))
 
+        let result = matrix.items.flatMap { $0 }.filter { !$0.isEmpty }.count
+        let expectedResult = 1
+
+        XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_WhenMatrixHasOneItem_ShouldNotAddNewRow() {
-
+        
 
     }
     func testInsertValue_WhenMatrixHasOneRowFilled_OrderedPolicy_ShouldAddNewRow() {
