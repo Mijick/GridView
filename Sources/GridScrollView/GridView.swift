@@ -15,14 +15,14 @@ public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
-    var sorting: Sorting = .ordered
+    var sorting: MatrixInsertionPolicy = .ordered
     @State private var itemHeights: [Int: CGFloat] = [:]
     @State private var contentHeight: CGFloat = 0
 
 
 
 
-    @State private var heightMatrix: Matrix = .init(columns: 3)
+    @State private var heightMatrix: Matrix = .init(columns: 3, policy: .ordered)
 
 
 
@@ -202,4 +202,4 @@ fileprivate extension CGFloat {
 
 
 
-enum Sorting { case ordered, fill }
+
