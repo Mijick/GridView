@@ -30,25 +30,6 @@ extension Matrix {
         addNewRowIfNeeded(position)
         insertItem(item, position)
     }}
-
-
-
-
-    mutating func insert(_ item: CGFloat, itemIndex: Int, column: Int) {
-        guard indexes[itemIndex] == nil else { return }
-
-        if let index = itemsOld.firstIndex(where: { $0[column] == 0 }) {
-            indexes.updateValue((index, column), forKey: itemIndex)
-            itemsOld[index][column] = item
-            return
-        }
-
-        itemsOld.append(.init(repeating: 0, count: numberOfColumns))
-
-        indexes.updateValue((itemsOld.count - 1, column), forKey: itemIndex)
-        lastRow[column] = item
-
-    }
 }
 private extension Matrix {
     func canItemBeInserted(_ item: Item) -> Bool { !items.flatMap { $0 }.contains(item) }
@@ -78,6 +59,16 @@ private extension Matrix {
     }
 }
 
+// MARK: - Getting Index Position
+extension Matrix {
+    func getPosition(for itemIndex: Int) -> Position {
+        guard let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == itemIndex }) }),
+              let columnIndex = items[rowIndex].firstIndex(where: { $0.index == itemIndex })
+        else { return .init(row: 0, column: 0) }
+
+        return .init(row: rowIndex, column: columnIndex)
+    }
+}
 
 
 
@@ -88,6 +79,24 @@ private extension Matrix {
 
 
 extension Matrix {
+    mutating func insert(_ item: CGFloat, itemIndex: Int, column: Int) {
+        guard indexes[itemIndex] == nil else { return }
+
+        if let index = itemsOld.firstIndex(where: { $0[column] == 0 }) {
+            indexes.updateValue((index, column), forKey: itemIndex)
+            itemsOld[index][column] = item
+            return
+        }
+
+        itemsOld.append(.init(repeating: 0, count: numberOfColumns))
+
+        indexes.updateValue((itemsOld.count - 1, column), forKey: itemIndex)
+        lastRow[column] = item
+
+    }
+
+
+
     func getMatrix() -> [[CGFloat]] { itemsOld }
 
 
