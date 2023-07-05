@@ -51,11 +51,20 @@ extension Matrix_Test {
         XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_WhenMatrixHasOneRowFilled_OrderedPolicy_ShouldMatchPattern() {
-        
+        matrix = .init(columns: 4, itemsSpacing: 8, policy: .ordered)
+        for index in 0..<10 { matrix.insert(.init(index: index, value: entryValues[index])) }
 
+        let result: [[CGFloat]] = matrix.items.map { $0.map { $0.value } }
+        let expectedResult: [[CGFloat]] = [
+            [100, 200, 50, 100],
+            [150, 100, 50, 100],
+            [100, 150, 0, 0]
+        ]
+
+        XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_WhenMatrixHasOneRowFilled_FillPolicy_ShouldMatchPattern() {
-        for index in 0..<10 { matrix.insert(.init(index: index, value: [100, 200, 50, 100, 150, 100, 50, 100, 100, 150][index])) }
+        for index in 0..<10 { matrix.insert(.init(index: index, value: entryValues[index])) }
 
         let result: [[CGFloat]] = matrix.items.map { $0.map { $0.value } }
         let expectedResult: [[CGFloat]] = [
@@ -66,4 +75,8 @@ extension Matrix_Test {
 
         XCTAssertEqual(result, expectedResult)
     }
+}
+
+private extension Matrix_Test {
+    var entryValues: [CGFloat] { [100, 200, 50, 100, 150, 100, 50, 100, 100, 150] }
 }
