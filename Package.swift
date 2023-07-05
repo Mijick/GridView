@@ -13,5 +13,6 @@ let package = Package(
     ],
     targets: [
         .target(name: "GridScrollView", dependencies: []),
+        .testTarget(name: "GridScrollViewTests", dependencies: ["GridScrollView"])
     ]
 )
