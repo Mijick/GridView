@@ -39,7 +39,7 @@ private extension Matrix {
         items.insertEmptyRow(numberOfColumns: numberOfColumns)
     }}
     mutating func insertItem(_ item: Item, _ position: Position) {
-        items[position.row][position.column] = item
+        items[position] = item
     }
 }
 private extension Matrix {
@@ -86,7 +86,7 @@ extension Matrix {
 }
 private extension Matrix {
     func getItemValue(_ position: Position) -> CGFloat {
-        let itemValue = items[position.row][position.column].value
+        let itemValue = items[position].value
         return itemValue + itemsSpacing
     }
 }

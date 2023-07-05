@@ -20,3 +20,12 @@ extension Matrix.Item {
 extension Matrix.Item {
     var isEmpty: Bool { value == 0 }
 }
+
+
+// MARK: - Array
+extension [[Matrix.Item]] {
+    subscript(_ position: Matrix.Position) -> Matrix.Item {
+        get { self[position.row][position.column] }
+        set { self[position.row][position.column] = newValue }
+    }
+}
