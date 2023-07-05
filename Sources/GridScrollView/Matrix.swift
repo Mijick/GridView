@@ -54,8 +54,8 @@ private extension Matrix {
     func canItemBeInserted(_ item: Item) -> Bool { !items.flatMap { $0 }.contains(item) }
     func findPositionForItem(_ item: Item) -> Position {
         switch policy {
-            case .ordered: return findPositionForOrderedPolicy()
-            case .fill: return findPositionForFillPolicy()
+            case .ordered: return findPositionForOrderedPolicy(item)
+            case .fill: return findPositionForFillPolicy(item)
         }
     }
     func addNewRowIfNeeded(_ position: Position) {
@@ -66,10 +66,14 @@ private extension Matrix {
     }
 }
 private extension Matrix {
-    func findPositionForOrderedPolicy() -> Position {
-        fatalError()
+    func findPositionForOrderedPolicy(_ item: Item) -> Position {
+        let index = item.index
+
+        let rowIndex = index / numberOfColumns
+        let columnIndex = index % numberOfColumns
+        return .init(row: rowIndex, column: columnIndex)
     }
-    func findPositionForFillPolicy() -> Position {
+    func findPositionForFillPolicy(_ item: Item) -> Position {
         fatalError()
     }
 }
