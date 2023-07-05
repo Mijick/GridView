@@ -54,7 +54,7 @@ private extension GridView {
 
 
             .frame(maxWidth: .infinity)
-            .alignmentGuide(.top) { handleTop(index, $0, reader) }
+            .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeading(index, $0, reader) }
             .frame(width: calculateItemWidth(reader.size.width))
     }
@@ -62,7 +62,7 @@ private extension GridView {
 
 // MARK: - Alignment Guides
 private extension GridView {
-    func handleTop(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
+    func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let itemHeight = dimensions.height
         let item = Matrix.Item(index: index, value: itemHeight)
 
@@ -96,53 +96,11 @@ private extension GridView {
 
 
 
-
-
-
-    func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
-        let itemHeight = dimensions.height
-        let itemsHeight = calculateItemsHeight(upTo: index)
-        let contentHeight = calculateContentHeight(upTo: index, itemsHeight)
-
-        updateItemHeights(index, itemHeight)
-        updateContentHeight(contentHeight, itemHeight)
-
-        return -contentHeight
-    }
     func handleLeadingAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let availableWidth = reader.size.width
         let itemPadding = calculateItemLeadingPadding(index, availableWidth)
         return itemPadding
     }
-}
-
-// MARK: - Vertical Values
-private extension GridView {
-    func updateItemHeights(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
-        itemHeights.updateValue(itemHeight, forKey: index)
-    }}
-    func updateContentHeight(_ currentHeight: CGFloat, _ itemHeight: CGFloat) { DispatchQueue.main.async {
-        contentHeight = max(contentHeight, currentHeight + itemHeight)
-    }}
-}
-private extension GridView {
-    func calculateItemsHeight(upTo index: Int) -> CGFloat {
-        itemHeights
-            .filter { $0.key < index }
-            .filter { (index - $0.key) % numberOfColumns == 0 }
-            .reduce(0) { $0 + $1.value }
-    }
-    func calculateContentHeight(upTo index: Int, _ itemsHeight: CGFloat) -> CGFloat {
-        let spacingValue = getVerticalSpacingValue(index)
-        return spacingValue + itemsHeight
-    }
-}
-private extension GridView {
-    func getVerticalSpacingValue(_ index: Int) -> CGFloat {
-        let rowNumber = getRowNumber(index).floatValue
-        return rowNumber * verticalSpacing
-    }
-    func getRowNumber(_ index: Int) -> Int { index / numberOfColumns }
 }
 
 // MARK: - Horizontal Values
