@@ -20,7 +20,7 @@ extension Matrix_Test {
     func testInsertValue_WhenMatrixIsEmpty() {
         matrix.insert(.init(index: 0, value: 100))
 
-        let result: [[CGFloat]] = matrix.items.toValues()
+        let result: [[CGFloat]] = matrix.items.map { $0.map(\.value) }
         let expectedResult: [[CGFloat]] = [[100, 0, 0, 0]]
 
         XCTAssertEqual(result, expectedResult)
@@ -35,9 +35,7 @@ extension Matrix_Test {
         XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_InsertManyItemsOfDifferentIndexes_ShouldInsertItems() {
-        for index in 0..<5 {
-            matrix.insert(.init(index: index, value: 100))
-        }
+        for index in 0..<5 { matrix.insert(.init(index: index, value: 100)) }
 
         let result = matrix.items.flatMap { $0 }.filter { !$0.isEmpty }.count
         let expectedResult = 5
@@ -45,34 +43,27 @@ extension Matrix_Test {
         XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_InsertManyItemsOfDifferentIndexes_ShouldAddNewRow() {
-        for index in 0..<5 {
-            matrix.insert(.init(index: index, value: 100))
-        }
+        for index in 0..<5 { matrix.insert(.init(index: index, value: 100)) }
 
         let result = matrix.items.count
         let expectedResult = 2
 
         XCTAssertEqual(result, expectedResult)
     }
-    func testInsertValue_WhenMatrixHasOneRowFilled_OrderedPolicy_ShouldAddNewRow() {
+    func testInsertValue_WhenMatrixHasOneRowFilled_OrderedPolicy_ShouldMatchPattern() {
         
 
     }
-    func testInsertValue_WhenMatrixHasOneRowFilled_FillPolicy_ShouldAddNewRow() {
+    func testInsertValue_WhenMatrixHasOneRowFilled_FillPolicy_ShouldMatchPattern() {
+        for index in 0..<10 { matrix.insert(.init(index: index, value: [100, 200, 50, 100, 150, 100, 50, 100, 100, 150][index])) }
 
+        let result: [[CGFloat]] = matrix.items.map { $0.map { $0.value } }
+        let expectedResult: [[CGFloat]] = [
+            [100, 200, 50, 100],
+            [100, 150, 150, 50],
+            [100, 0, 0, 100]
+        ]
+
+        XCTAssertEqual(result, expectedResult)
     }
-    func testInsertValue_WhenMatrixIsNotEmpty_ShouldUpdateValue() {
-
-    }
-}
-
-// MARK: - Calculating Column Height
-extension Matrix_Test {
-
-}
-
-
-// MARK: - Helpers
-fileprivate extension [[Matrix.Item]] {
-    func toValues() -> [[CGFloat]] { map { $0.map(\.value) } }
 }
