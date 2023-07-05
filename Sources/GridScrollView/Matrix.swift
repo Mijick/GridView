@@ -14,12 +14,7 @@ struct Matrix {
     private var items: [[Item]]
     private let policy: MatrixInsertionPolicy
 
-
-
-    private var itemsOld: [[CGFloat]]
-    private var indexes: [Int: (row: Int, column: Int)] = [:]
-
-    init(columns: Int, policy: MatrixInsertionPolicy) { items = .init(numberOfColumns: columns); itemsOld = [.init(repeating: 0, count: columns)]; self.policy = policy }
+    init(columns: Int, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.policy = policy }
 }
 
 // MARK: - Inserting Items
@@ -55,7 +50,6 @@ private extension Matrix {
         return .init(row: rowIndex, column: columnIndex)
     }
     func findPositionForFillPolicy(_ item: Item) -> Position {
-        let index = item.index
         let columnHeights = getColumnHeights()
 
         let columnIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
@@ -63,7 +57,7 @@ private extension Matrix {
         return .init(row: rowIndex, column: columnIndex)
     }
 }
-private extension Matrix {
+extension Matrix {
     func getColumnHeights(upToRow index: Int? = nil) -> [CGFloat] {
         let lastIndex = index ?? items.count - 1
 
@@ -106,78 +100,8 @@ extension Matrix {
 
 
 
-
-extension Matrix {
-    mutating func insert(_ item: CGFloat, itemIndex: Int, column: Int) {
-        guard indexes[itemIndex] == nil else { return }
-
-        if let index = itemsOld.firstIndex(where: { $0[column] == 0 }) {
-            indexes.updateValue((index, column), forKey: itemIndex)
-            itemsOld[index][column] = item
-            return
-        }
-
-        itemsOld.append(.init(repeating: 0, count: numberOfColumns))
-
-        indexes.updateValue((itemsOld.count - 1, column), forKey: itemIndex)
-        lastRow[column] = item
-
-    }
-
-
-
-    func getPosition(_ index: Int) -> (row: Int, column: Int) { indexes[index] ?? (0, 0) }
-
-
-
-
-//    func getColumnHeights() -> [CGFloat] {
-//        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
-//
-//        for columnIndex in 0..<numberOfColumns {
-//            for rowIndex in 0..<itemsOld.count {
-//                array[columnIndex] += itemsOld[rowIndex][columnIndex]
-//            }
-//        }
-//
-//        return array
-//    }
-
-    func getMaxHeightRow() -> Int {
-        let column = getColumnHeights().enumerated().max(by: { $0.element > $1.element })?.offset ?? 0
-
-
-        let row = itemsOld.lastIndex(where: { $0[column] == 0 }) ?? itemsOld.count
-
-
-
-
-        return max(0, row - 1)
-    }
-
-
-    func getColumnHeight(upTo row: Int, column: Int) -> CGFloat {
-        var uuu = 0.0
-
-        for index in 0..<row {
-            let a = itemsOld[index][column]
-            uuu += a
-        }
-
-
-        return uuu
-    }
-}
-
 private extension Matrix {
-    var numberOfColumns: Int { itemsOld.first?.count ?? 0 }
-
-
-
-    var lastRow: [CGFloat] {
-        get { itemsOld.last ?? [] }
-        set { itemsOld[itemsOld.count - 1] = newValue }
-    }
+    var numberOfColumns: Int { items.first?.count ?? 0 }
 }
 
 

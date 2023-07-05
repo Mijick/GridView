@@ -22,7 +22,7 @@ public struct GridView: View {
 
 
 
-    @State private var heightMatrix: Matrix = .init(columns: 3, policy: .ordered)
+    @State private var heightMatrix: Matrix = .init(columns: 3, policy: .fill)
 
 
 
@@ -64,33 +64,23 @@ private extension GridView {
 private extension GridView {
     func handleTop(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let itemHeight = dimensions.height
+        let item = Matrix.Item(index: index, value: itemHeight)
 
+        DispatchQueue.main.async { heightMatrix.insert(item) }
 
-
-
-        update(index, itemHeight)
-
-
-        let position = heightMatrix.getPosition(index)
-
+        let position = heightMatrix.getPosition(for: index)
 
         let spacing = position.row.floatValue * verticalSpacing
 
 
-        //heightMatrix.printuj()
-
-        return -heightMatrix.getColumnHeight(upTo: position.row, column: position.column) - spacing
+        return -heightMatrix.getColumnHeights(upToRow: position.row)[position.column] - spacing
 
     }
-    func update(_ index: Int, _ itemHeight: CGFloat) { DispatchQueue.main.async {
-        let min = heightMatrix.getColumnHeights().enumerated().min(by: { $0.element < $1.element })
-        heightMatrix.insert(itemHeight, itemIndex: index, column: min?.offset ?? 0)
-    }}
 
 
     func handleLeading(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let availableWidth = reader.size.width
-        let a = heightMatrix.getPosition(index).column.floatValue + 1
+        let a = heightMatrix.getPosition(for: index).column.floatValue + 1
 
         let ab = calculateItemWidth(availableWidth)
 
@@ -103,10 +93,11 @@ private extension GridView {
 
 
     func calculateContentHeight() -> CGFloat {
-        let a = heightMatrix.getColumnHeights().enumerated().max(by: { $0.element < $1.element })
-        let spacing = heightMatrix.getMaxHeightRow().floatValue * verticalSpacing
-        let height = a?.element ?? 0
-        return height + spacing
+        3000
+//        let a = heightMatrix.getColumnHeights().enumerated().max(by: { $0.element < $1.element })
+//        let spacing = heightMatrix.getMaxHeightRow().floatValue * verticalSpacing
+//        let height = a?.element ?? 0
+//        return height + spacing
     }
 
 
