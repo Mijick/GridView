@@ -91,40 +91,17 @@ private extension Matrix {
     }
 }
 
-// MARK: - Helpers
+// MARK: - Others
 private extension Matrix {
     var numberOfColumns: Int { items.first?.count ?? 0 }
 }
 
 
-
-enum MatrixInsertionPolicy { case ordered, fill }
-
-
-
-extension Matrix { struct Item: Equatable {
-    var index: Int
-    var value: CGFloat
-}}
-extension Matrix.Item {
-    static func ==(lhs: Self, rhs: Self) -> Bool { lhs.index == rhs.index }
-}
-extension Matrix.Item {
-    var isEmpty: Bool { value == 0 }
-}
-
-
-
-
-extension Matrix { struct Position {
-    var row: Int
-    var column: Int
-}}
-
-
-
 // MARK: - Helpers
 fileprivate extension [[Matrix.Item]] {
-    init(numberOfColumns: Int) { self = [.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)] }
-    mutating func insertEmptyRow(numberOfColumns: Int) { append(.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)) }
+    init(numberOfColumns: Int) { self = [.empty(numberOfColumns)] }
+    mutating func insertEmptyRow(numberOfColumns: Int) { append(.empty(numberOfColumns)) }
+}
+fileprivate extension [Matrix.Item] {
+    static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0), count: numberOfColumns) }
 }
