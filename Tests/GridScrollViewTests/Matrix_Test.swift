@@ -34,11 +34,28 @@ extension Matrix_Test {
 
         XCTAssertEqual(result, expectedResult)
     }
-    func testInsertValue_WhenMatrixHasOneItem_ShouldNotAddNewRow() {
-        
+    func testInsertValue_InsertManyItemsOfDifferentIndexes_ShouldInsertItems() {
+        for index in 0..<5 {
+            matrix.insert(.init(index: index, value: 100))
+        }
 
+        let result = matrix.items.flatMap { $0 }.filter { !$0.isEmpty }.count
+        let expectedResult = 5
+
+        XCTAssertEqual(result, expectedResult)
+    }
+    func testInsertValue_InsertManyItemsOfDifferentIndexes_ShouldAddNewRow() {
+        for index in 0..<5 {
+            matrix.insert(.init(index: index, value: 100))
+        }
+
+        let result = matrix.items.count
+        let expectedResult = 2
+
+        XCTAssertEqual(result, expectedResult)
     }
     func testInsertValue_WhenMatrixHasOneRowFilled_OrderedPolicy_ShouldAddNewRow() {
+        
 
     }
     func testInsertValue_WhenMatrixHasOneRowFilled_FillPolicy_ShouldAddNewRow() {
