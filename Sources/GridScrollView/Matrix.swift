@@ -19,7 +19,7 @@ struct Matrix {
     private var itemsOld: [[CGFloat]]
     private var indexes: [Int: (row: Int, column: Int)] = [:]
 
-    init(columns: Int, policy: MatrixInsertionPolicy) { items = [.init(repeating: .init(value: 0), count: columns)]; itemsOld = [.init(repeating: 0, count: columns)]; self.policy = policy }
+    init(columns: Int, policy: MatrixInsertionPolicy) { items = .init(numberOfColumns: columns); itemsOld = [.init(repeating: 0, count: columns)]; self.policy = policy }
 }
 
 // MARK: - Inserting Items
@@ -58,11 +58,11 @@ private extension Matrix {
             case .fill: return findPositionForFillPolicy(item)
         }
     }
-    func addNewRowIfNeeded(_ position: Position) {
-
-    }
-    func insertItem(_ item: Item, _ position: Position) {
-
+    mutating func addNewRowIfNeeded(_ position: Position) { if position.row >= items.count {
+        items.insertEmptyRow(numberOfColumns: numberOfColumns)
+    }}
+    mutating func insertItem(_ item: Item, _ position: Position) {
+        items[position.row][position.column] = item
     }
 }
 private extension Matrix {
@@ -181,3 +181,11 @@ extension Matrix { struct Position {
     var row: Int
     var column: Int
 }}
+
+
+
+
+extension [[Matrix.Item]] {
+    init(numberOfColumns: Int) { self = [.init(repeating: .init(value: 0), count: numberOfColumns)] }
+    mutating func insertEmptyRow(numberOfColumns: Int) { append(.init(repeating: .init(value: 0), count: numberOfColumns)) }
+}
