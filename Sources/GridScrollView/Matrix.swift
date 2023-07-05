@@ -11,7 +11,7 @@
 import SwiftUI
 
 struct Matrix {
-    private var items: [[Item]]
+    private(set) var items: [[Item]]
     private let policy: MatrixInsertionPolicy
     private let itemsSpacing: CGFloat
 
