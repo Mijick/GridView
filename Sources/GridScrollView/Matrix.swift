@@ -53,13 +53,13 @@ private extension Matrix {
         let columnHeights = getColumnHeights()
 
         let columnIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
-        let rowIndex = items.lastIndex(where: { $0[columnIndex].isEmpty }) ?? items.count
+        let rowIndex = items.firstIndex(where: { $0[columnIndex].isEmpty }) ?? items.count
         return .init(row: rowIndex, column: columnIndex)
     }
 }
 extension Matrix {
     func getColumnHeights(upToRow index: Int? = nil) -> [CGFloat] {
-        let lastIndex = index ?? items.count - 1
+        let lastIndex = index ?? items.count
 
         var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
         for columnIndex in 0..<numberOfColumns {
@@ -118,7 +118,7 @@ extension Matrix.Item {
     static func ==(lhs: Self, rhs: Self) -> Bool { lhs.index == rhs.index }
 }
 extension Matrix.Item {
-    var isEmpty: Bool { index == -1 }
+    var isEmpty: Bool { value == 0 }
 }
 
 
