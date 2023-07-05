@@ -23,11 +23,11 @@ final class Matrix_Test: XCTestCase {
 // MARK: - Inserting
 extension Matrix_Test {
     func testInsertValue_WhenMatrixIsEmpty() {
-        var matrix = Matrix(columns: 3)
-        matrix.insert(100, itemIndex: 0, column: 0)
+        var matrix = Matrix(columns: 3, policy: .ordered)
+        matrix.insert(.init(index: 0, value: 100))
 
-        let result: [[CGFloat]] = matrix.getMatrix()
-        let expectedResult: [[CGFloat]] = [[100, 0, 0]]
+        let result: [[Matrix.Item]] = matrix.getMatrix()
+        let expectedResult: [[Matrix.Item]] = [[.init(index: 0, value: 100), .init(index: -1, value: 0), .init(index: -1, value: 0)]]
 
         XCTAssertEqual(result, expectedResult)
     }
@@ -35,7 +35,7 @@ extension Matrix_Test {
 
     }
     func testInsertValue_WhenMatrixIsNotEmpty_ShouldNotAddNewRow() {
-        var matrix = Matrix(columns: 3)
+        var matrix = Matrix(columns: 3, policy: .fill)
 
     }
     func testInsertValue_WhenMatrixIsNotEmpty_ShouldAddNewRow() {

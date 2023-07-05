@@ -70,6 +70,17 @@ extension Matrix {
     }
 }
 
+// MARK: - Getting Column Heights
+extension Matrix {
+    
+}
+
+
+// MARK: - Testing Helpers
+extension Matrix {
+    func getMatrix() -> [[Item]] { items }
+}
+
 
 
 
@@ -95,9 +106,6 @@ extension Matrix {
 
     }
 
-
-
-    func getMatrix() -> [[CGFloat]] { itemsOld }
 
 
     func getPosition(_ index: Int) -> (row: Int, column: Int) { indexes[index] ?? (0, 0) }
@@ -141,18 +149,6 @@ extension Matrix {
 
         return uuu
     }
-
-
-
-    func printuj() {
-        print("Matrix is:")
-        for x in 0..<itemsOld.count {
-            for y in 0..<itemsOld[0].count {
-                print(itemsOld[x][y], terminator:" ")
-            }
-            print("\n")
-        }
-    }
 }
 
 private extension Matrix {
@@ -173,7 +169,7 @@ enum MatrixInsertionPolicy { case ordered, fill }
 
 
 extension Matrix { struct Item: Equatable {
-    var index: Int = -1
+    var index: Int
     var value: CGFloat
 }}
 extension Matrix.Item {
@@ -195,6 +191,6 @@ extension Matrix { struct Position {
 
 
 extension [[Matrix.Item]] {
-    init(numberOfColumns: Int) { self = [.init(repeating: .init(value: 0), count: numberOfColumns)] }
-    mutating func insertEmptyRow(numberOfColumns: Int) { append(.init(repeating: .init(value: 0), count: numberOfColumns)) }
+    init(numberOfColumns: Int) { self = [.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)] }
+    mutating func insertEmptyRow(numberOfColumns: Int) { append(.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)) }
 }
