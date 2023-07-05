@@ -16,12 +16,6 @@ public struct GridView: View {
     var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
     var sorting: MatrixInsertionPolicy = .ordered
-    @State private var itemHeights: [Int: CGFloat] = [:]
-    @State private var contentHeight: CGFloat = 0
-
-
-
-
     @State private var heightMatrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .fill)
 
 
@@ -55,7 +49,7 @@ private extension GridView {
 
             .frame(maxWidth: .infinity)
             .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
-            .alignmentGuide(.leading) { handleLeading(index, $0, reader) }
+            .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
             .frame(width: calculateItemWidth(reader.size.width))
     }
 }
@@ -63,44 +57,25 @@ private extension GridView {
 // MARK: - Alignment Guides
 private extension GridView {
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
-        let itemHeight = dimensions.height
-        let item = Matrix.Item(index: index, value: itemHeight)
-
-        DispatchQueue.main.async { heightMatrix.insert(item) }
+        insertItem(index, dimensions.height)
 
         let position = heightMatrix.getPosition(for: index)
-
-
-        return -heightMatrix.getColumnsHeight(upToRow: position.row)[position.column]
-
+        let topPadding = -heightMatrix.getColumnsHeight(upToRow: position.row)[position.column]
+        return topPadding
     }
-
-
-    func handleLeading(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
-        let availableWidth = reader.size.width
-        let a = heightMatrix.getPosition(for: index).column.floatValue + 1
-
-        let ab = calculateItemWidth(availableWidth)
-
-
-        let spacing = horizontalSpacing * (a - 1)
-
-
-        return -ab * a - spacing
-    }
-
-
-    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnsHeight().max() ?? 0 }
-
-
-
-
-
     func handleLeadingAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         let availableWidth = reader.size.width
         let itemPadding = calculateItemLeadingPadding(index, availableWidth)
         return itemPadding
     }
+}
+
+// MARK: - Vertical Values
+private extension GridView {
+    func insertItem(_ index: Int, _ value: CGFloat) { DispatchQueue.main.async {
+        let item = Matrix.Item(index: index, value: value)
+        heightMatrix.insert(item)
+    }}
 }
 
 // MARK: - Horizontal Values
@@ -111,7 +86,7 @@ private extension GridView {
         return itemsWidth / numberOfColumns.floatValue
     }
     func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
-        let columnNumber = getColumnNumber(index)
+        let columnNumber = heightMatrix.getPosition(for: index).column
         let itemWidth = calculateItemWidth(availableWidth)
         let totalWidth = itemWidth + horizontalSpacing
         return -columnNumber.floatValue * totalWidth
@@ -122,7 +97,11 @@ private extension GridView {
         let numberOfSpaces = numberOfColumns - 1
         return numberOfSpaces.floatValue * horizontalSpacing
     }
-    func getColumnNumber(_ index: Int) -> Int { index % numberOfColumns }
+}
+
+// MARK: - Calculating Content Height
+private extension GridView {
+    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnsHeight().max() ?? 0 }
 }
 
 
@@ -138,9 +117,3 @@ fileprivate extension Color {
 fileprivate extension CGFloat {
     static func random(_ index: Int) -> CGFloat { [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2] }
 }
-
-
-
-
-
-
