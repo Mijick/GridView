@@ -13,8 +13,9 @@ import SwiftUI
 struct Matrix {
     private var items: [[Item]]
     private let policy: MatrixInsertionPolicy
+    private let itemsSpacing: CGFloat
 
-    init(columns: Int, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.policy = policy }
+    init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
 // MARK: - Inserting Items
@@ -50,24 +51,11 @@ private extension Matrix {
         return .init(row: rowIndex, column: columnIndex)
     }
     func findPositionForFillPolicy(_ item: Item) -> Position {
-        let columnHeights = getColumnHeights()
+        let columnsHeight = getColumnsHeight()
 
-        let columnIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
+        let columnIndex = columnsHeight.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
         let rowIndex = items.firstIndex(where: { $0[columnIndex].isEmpty }) ?? items.count
         return .init(row: rowIndex, column: columnIndex)
-    }
-}
-extension Matrix {
-    func getColumnHeights(upToRow index: Int? = nil) -> [CGFloat] {
-        let lastIndex = index ?? items.count
-
-        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
-        for columnIndex in 0..<numberOfColumns {
-            for rowIndex in 0..<lastIndex {
-                array[columnIndex] += items[rowIndex][columnIndex].value
-            }
-        }
-        return array
     }
 }
 
@@ -84,22 +72,26 @@ extension Matrix {
 
 // MARK: - Getting Column Heights
 extension Matrix {
-    
+    func getColumnsHeight(upToRow index: Int? = nil) -> [CGFloat] {
+        let lastIndex = index ?? items.count
+
+        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+        for columnIndex in 0..<numberOfColumns {
+            for rowIndex in 0..<lastIndex {
+                array[columnIndex] += getItemValue(.init(row: rowIndex, column: columnIndex))
+            }
+        }
+        return array
+    }
+}
+private extension Matrix {
+    func getItemValue(_ position: Position) -> CGFloat {
+        let itemValue = items[position.row][position.column].value
+        return itemValue + itemsSpacing
+    }
 }
 
-
-// MARK: - Testing Helpers
-extension Matrix {
-    func getMatrix() -> [[Item]] { items }
-}
-
-
-
-
-
-
-
-
+// MARK: - Helpers
 private extension Matrix {
     var numberOfColumns: Int { items.first?.count ?? 0 }
 }

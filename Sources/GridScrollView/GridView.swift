@@ -22,7 +22,7 @@ public struct GridView: View {
 
 
 
-    @State private var heightMatrix: Matrix = .init(columns: 3, policy: .fill)
+    @State private var heightMatrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .fill)
 
 
 
@@ -70,10 +70,8 @@ private extension GridView {
 
         let position = heightMatrix.getPosition(for: index)
 
-        let spacing = position.row.floatValue * verticalSpacing
 
-
-        return -heightMatrix.getColumnHeights(upToRow: position.row)[position.column] - spacing
+        return -heightMatrix.getColumnsHeight(upToRow: position.row)[position.column]
 
     }
 
@@ -92,13 +90,7 @@ private extension GridView {
     }
 
 
-    func calculateContentHeight() -> CGFloat {
-        3000
-//        let a = heightMatrix.getColumnHeights().enumerated().max(by: { $0.element < $1.element })
-//        let spacing = heightMatrix.getMaxHeightRow().floatValue * verticalSpacing
-//        let height = a?.element ?? 0
-//        return height + spacing
-    }
+    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnsHeight().max() ?? 0 }
 
 
 
