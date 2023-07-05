@@ -50,12 +50,30 @@ private extension Matrix {
     func findPositionForOrderedPolicy(_ item: Item) -> Position {
         let index = item.index
 
-        let rowIndex = index / numberOfColumns
         let columnIndex = index % numberOfColumns
+        let rowIndex = index / numberOfColumns
         return .init(row: rowIndex, column: columnIndex)
     }
     func findPositionForFillPolicy(_ item: Item) -> Position {
-        fatalError()
+        let index = item.index
+        let columnHeights = getColumnHeights()
+
+        let columnIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
+        let rowIndex = items.lastIndex(where: { $0[columnIndex].isEmpty }) ?? items.count
+        return .init(row: rowIndex, column: columnIndex)
+    }
+}
+private extension Matrix {
+    func getColumnHeights(upToRow index: Int? = nil) -> [CGFloat] {
+        let lastIndex = index ?? items.count - 1
+
+        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+        for columnIndex in 0..<numberOfColumns {
+            for rowIndex in 0..<lastIndex {
+                array[columnIndex] += items[rowIndex][columnIndex].value
+            }
+        }
+        return array
     }
 }
 
@@ -113,17 +131,17 @@ extension Matrix {
 
 
 
-    func getColumnHeights() -> [CGFloat] {
-        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
-
-        for columnIndex in 0..<numberOfColumns {
-            for rowIndex in 0..<itemsOld.count {
-                array[columnIndex] += itemsOld[rowIndex][columnIndex]
-            }
-        }
-
-        return array
-    }
+//    func getColumnHeights() -> [CGFloat] {
+//        var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
+//
+//        for columnIndex in 0..<numberOfColumns {
+//            for rowIndex in 0..<itemsOld.count {
+//                array[columnIndex] += itemsOld[rowIndex][columnIndex]
+//            }
+//        }
+//
+//        return array
+//    }
 
     func getMaxHeightRow() -> Int {
         let column = getColumnHeights().enumerated().max(by: { $0.element > $1.element })?.offset ?? 0
@@ -189,8 +207,8 @@ extension Matrix { struct Position {
 
 
 
-
-extension [[Matrix.Item]] {
+// MARK: - Helpers
+fileprivate extension [[Matrix.Item]] {
     init(numberOfColumns: Int) { self = [.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)] }
     mutating func insertEmptyRow(numberOfColumns: Int) { append(.init(repeating: .init(index: -1, value: 0), count: numberOfColumns)) }
 }
