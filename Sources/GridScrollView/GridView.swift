@@ -13,10 +13,10 @@ import SwiftUI
 public struct GridView: View {
     var verticalSpacing: CGFloat = 8
     var horizontalSpacing: CGFloat = 8
-    var numberOfColumns: Int = 3
+    var numberOfColumns: Int = 4
     var sorting: MatrixInsertionPolicy = .ordered
     var elements: [AnyGridElement] = []
-    @State private var heightMatrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .fill)
+    @State private var heightMatrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) {
@@ -73,22 +73,29 @@ private extension GridView {
 private extension GridView {
     func calculateItemWidth(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
         let itemColumns = elements[index].columns
-        let totalSpacingValue = getHorizontalSpacingTotalValue()
-        let itemsWidth = availableWidth - totalSpacingValue
-        let singleItemWidth = itemsWidth / numberOfColumns.floatValue
+        let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
-        let fixedItemWidth = singleItemWidth * itemColumns.floatValue
+        let fixedItemWidth = singleColumnWidth * itemColumns.floatValue
         let additionalHorizontalSpacing = (itemColumns.floatValue - 1) * horizontalSpacing
         return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
         let columnNumber = heightMatrix.getPosition(for: index).column
-        let itemWidth = calculateItemWidth(index, availableWidth)
-        let totalWidth = itemWidth + horizontalSpacing
-        return -columnNumber.floatValue * totalWidth
+        let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
+
+        let rawColumnsPaddingValue = singleColumnWidth * columnNumber.floatValue
+        let rawSpacingPaddingValue = (columnNumber.floatValue - 1) * horizontalSpacing
+
+        let rawPaddingValue = rawColumnsPaddingValue + rawSpacingPaddingValue
+        return -rawPaddingValue
     }
 }
 private extension GridView {
+    func calculateSingleColumnWidth(_ availableWidth: CGFloat) -> CGFloat {
+        let totalSpacingValue = getHorizontalSpacingTotalValue()
+        let itemsWidth = availableWidth - totalSpacingValue
+        return itemsWidth / numberOfColumns.floatValue
+    }
     func getHorizontalSpacingTotalValue() -> CGFloat {
         let numberOfSpaces = numberOfColumns - 1
         return numberOfSpaces.floatValue * horizontalSpacing
