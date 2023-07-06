@@ -13,16 +13,15 @@ import SwiftUI
 public struct GridView: View {
     var verticalSpacing: CGFloat = 8
     var horizontalSpacing: CGFloat = 8
-    var numberOfItems: Int = 24
     var numberOfColumns: Int = 3
     var sorting: MatrixInsertionPolicy = .ordered
+    var elements: [AnyGridElement] = []
     @State private var heightMatrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .fill)
 
 
-
-
-
-    public init() {}
+    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) {
+        data.forEach { elements.append(.init(content($0))) }
+    }
     public var body: some View { ScrollView(content: createContent) }
 }
 
@@ -30,23 +29,15 @@ private extension GridView {
     func createContent() -> some View {
         GeometryReader { reader in
             ZStack(alignment: .topLeading) {
-                ForEach(0..<numberOfItems, id: \.self) { createItem($0, reader) }
+                ForEach(0..<elements.count, id: \.self) { createItem($0, reader) }
             }
-        }.frame(height: calculateContentHeight())
+        }
+        .frame(height: calculateContentHeight())
     }
 }
 private extension GridView {
     func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
-        Rectangle()
-            .fill(Color.random)
-            .overlay(Text("\(index)"))
-            .frame(height: .random(index))
-            .border(Color.red)
-
-
-
-
-
+        elements[index]
             .frame(maxWidth: .infinity)
             .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
@@ -102,18 +93,4 @@ private extension GridView {
 // MARK: - Calculating Content Height
 private extension GridView {
     func calculateContentHeight() -> CGFloat { heightMatrix.getColumnsHeight().max() ?? 0 }
-}
-
-
-
-
-
-
-
-
-fileprivate extension Color {
-    static let random: Color = .init(.init(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1))
-}
-fileprivate extension CGFloat {
-    static func random(_ index: Int) -> CGFloat { [100, 200, 100][index % 3 == 0 ? 0 : index % 3 == 1 ? 1 : 2] }
 }
