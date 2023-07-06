@@ -14,5 +14,5 @@ public protocol GridElement: View {
     var columns: Int { get }
 }
 public extension GridElement {
-    var columns: Int { 0 }
+    var columns: Int { 1 }
 }

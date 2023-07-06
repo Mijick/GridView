@@ -41,7 +41,7 @@ private extension GridView {
             .frame(maxWidth: .infinity)
             .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
-            .frame(width: calculateItemWidth(reader.size.width))
+            .frame(width: calculateItemWidth(index, reader.size.width))
     }
 }
 
@@ -71,14 +71,19 @@ private extension GridView {
 
 // MARK: - Horizontal Values
 private extension GridView {
-    func calculateItemWidth(_ availableWidth: CGFloat) -> CGFloat {
+    func calculateItemWidth(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
+        let itemColumns = elements[index].columns
         let totalSpacingValue = getHorizontalSpacingTotalValue()
         let itemsWidth = availableWidth - totalSpacingValue
-        return itemsWidth / numberOfColumns.floatValue
+        let singleItemWidth = itemsWidth / numberOfColumns.floatValue
+
+        let fixedItemWidth = singleItemWidth * itemColumns.floatValue
+        let additionalHorizontalSpacing = (itemColumns.floatValue - 1) * horizontalSpacing
+        return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
         let columnNumber = heightMatrix.getPosition(for: index).column
-        let itemWidth = calculateItemWidth(availableWidth)
+        let itemWidth = calculateItemWidth(index, availableWidth)
         let totalWidth = itemWidth + horizontalSpacing
         return -columnNumber.floatValue * totalWidth
     }
