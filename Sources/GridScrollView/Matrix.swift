@@ -76,8 +76,8 @@ extension Matrix {
         let lastIndex = index ?? items.count
 
         var array: [CGFloat] = .init(repeating: 0, count: numberOfColumns)
-        for columnIndex in 0..<numberOfColumns {
-            for rowIndex in 0..<lastIndex {
+        for rowIndex in 0..<lastIndex {
+            for columnIndex in 0..<numberOfColumns {
                 array[columnIndex] += getItemValue(.init(row: rowIndex, column: columnIndex))
             }
         }
