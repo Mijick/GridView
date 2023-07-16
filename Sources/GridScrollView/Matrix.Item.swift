@@ -13,6 +13,7 @@ import SwiftUI
 extension Matrix { struct Item: Equatable {
     var index: Int
     var value: CGFloat
+    var columns: Int
 }}
 extension Matrix.Item {
     static func ==(lhs: Self, rhs: Self) -> Bool { lhs.index == rhs.index }

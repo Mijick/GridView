@@ -92,7 +92,7 @@ private extension Matrix {
 }
 
 // MARK: - Others
-private extension Matrix {
+extension Matrix {
     var numberOfColumns: Int { items.first?.count ?? 0 }
 }
 
@@ -103,5 +103,5 @@ fileprivate extension [[Matrix.Item]] {
     mutating func insertEmptyRow(numberOfColumns: Int) { append(.empty(numberOfColumns)) }
 }
 fileprivate extension [Matrix.Item] {
-    static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0), count: numberOfColumns) }
+    static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0, columns: 1), count: numberOfColumns) }
 }

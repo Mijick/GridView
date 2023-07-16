@@ -13,10 +13,8 @@ import SwiftUI
 public struct GridView: View {
     var verticalSpacing: CGFloat = 8
     var horizontalSpacing: CGFloat = 8
-    var numberOfColumns: Int = 4
-    var sorting: MatrixInsertionPolicy = .ordered
     var elements: [AnyGridElement] = []
-    @State private var heightMatrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)
+    @State private var matrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .ordered)
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) {
@@ -50,8 +48,8 @@ private extension GridView {
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         insertItem(index, dimensions.height)
 
-        let position = heightMatrix.getPosition(for: index)
-        let topPadding = -heightMatrix.getColumnsHeight(upToRow: position.row)[position.column]
+        let position = matrix.getPosition(for: index)
+        let topPadding = -matrix.getColumnsHeight(upToRow: position.row)[position.column]
         return topPadding
     }
     func handleLeadingAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
@@ -64,8 +62,8 @@ private extension GridView {
 // MARK: - Vertical Values
 private extension GridView {
     func insertItem(_ index: Int, _ value: CGFloat) { DispatchQueue.main.async {
-        let item = Matrix.Item(index: index, value: value)
-        heightMatrix.insert(item)
+        let item = Matrix.Item(index: index, value: value, columns: elements[index].columns)
+        matrix.insert(item)
     }}
 }
 
@@ -80,7 +78,7 @@ private extension GridView {
         return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
-        let columnNumber = heightMatrix.getPosition(for: index).column
+        let columnNumber = matrix.getPosition(for: index).column
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
         let rawColumnsPaddingValue = singleColumnWidth * columnNumber.floatValue
@@ -94,15 +92,15 @@ private extension GridView {
     func calculateSingleColumnWidth(_ availableWidth: CGFloat) -> CGFloat {
         let totalSpacingValue = getHorizontalSpacingTotalValue()
         let itemsWidth = availableWidth - totalSpacingValue
-        return itemsWidth / numberOfColumns.floatValue
+        return itemsWidth / matrix.numberOfColumns.floatValue
     }
     func getHorizontalSpacingTotalValue() -> CGFloat {
-        let numberOfSpaces = numberOfColumns - 1
+        let numberOfSpaces = matrix.numberOfColumns - 1
         return numberOfSpaces.floatValue * horizontalSpacing
     }
 }
 
 // MARK: - Calculating Content Height
 private extension GridView {
-    func calculateContentHeight() -> CGFloat { heightMatrix.getColumnsHeight().max() ?? 0 }
+    func calculateContentHeight() -> CGFloat { matrix.getColumnsHeight().max() ?? 0 }
 }
