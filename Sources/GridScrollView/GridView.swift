@@ -11,7 +11,6 @@
 import SwiftUI
 
 public struct GridView: View {
-    var verticalSpacing: CGFloat = 8
     var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
     @State private var matrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .ordered)
@@ -49,7 +48,20 @@ private extension GridView {
         insertItem(index, dimensions.height)
 
         let position = matrix.getPosition(for: index)
-        let topPadding = -matrix.getColumnsHeight(upToRow: position.row)[position.column]
+
+
+        if position.row == 0 {
+            return 0
+        }
+
+
+        let range = matrix.getRange(for: position)
+
+
+
+        let topPadding = -(matrix.getHeights()[position.row - 1][range].max() ?? 0)
+
+
         return topPadding
     }
     func handleLeadingAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
@@ -102,5 +114,5 @@ private extension GridView {
 
 // MARK: - Calculating Content Height
 private extension GridView {
-    func calculateContentHeight() -> CGFloat { matrix.getColumnsHeight().max() ?? 0 }
+    func calculateContentHeight() -> CGFloat { matrix.getHeights().flatMap { $0 }.max() ?? 0 }
 }
