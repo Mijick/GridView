@@ -151,30 +151,9 @@ fileprivate extension [[Matrix.Item]] {
 fileprivate extension [Matrix.Item] {
     static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0, columns: 1), count: numberOfColumns) }
 }
-
-
-
-
-
-extension [[CGFloat]] {
-    func print() {
-        Swift.print("\n\nARRAY:")
-
-        for row in 0..<count {
-            var text = ""
-            for column in 0..<self[row].count {
-                text += "\(self[row][column])  "
-
-            }
-            Swift.print(text)
-        }
-    }
-
-
-
+fileprivate extension [[CGFloat]] {
     subscript(position: Matrix.Position) -> CGFloat {
         get { self[position.row][position.column] }
         set { self[position.row][position.column] = newValue }
     }
-
 }
