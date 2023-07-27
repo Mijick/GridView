@@ -90,7 +90,7 @@ private extension GridView {
         return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateItemLeadingPadding(_ index: Int, _ availableWidth: CGFloat) -> CGFloat {
-        let columnNumber = matrix.getPosition(for: index).column
+        let columnNumber = matrix.getRange(for: index).start.column
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
         let rawColumnsPaddingValue = singleColumnWidth * columnNumber.floatValue

@@ -80,19 +80,15 @@ private extension Matrix {
 }
 private extension Matrix {
     func findPositionForOrderedPolicy(_ item: Item) -> Position {
-        if item.index == 0 { return .zero }
+        guard item.index > 0 else { return .zero }
 
-        let previousItemRange = getRange(for: item.index - 1)
-
-        if canItemBeInsertedInThisRow(item, previousItemRange) { return .init(row: previousItemRange.start.row, column: previousItemRange.end.column + 1) }
-
-        return .init(row: previousItemRange.start.row + 1, column: 0)
-
-
-        func canItemBeInsertedInThisRow(_ item: Item, _ previousItemRange: Range) -> Bool {
-            item.columns + previousItemRange.end.column < numberOfColumns
-        }
+        let previousItemRangeEnd = getRange(for: item.index - 1).end
+        return canInsertItemInRow(item, previousItemRangeEnd) ?
+            previousItemRangeEnd.nextColumn() : previousItemRangeEnd.nextRow()
     }
+    func canInsertItemInRow(_ item: Item, _ previousItemRangeEnd: Position) -> Bool { item.columns + previousItemRangeEnd.column < numberOfColumns }
+}
+private extension Matrix {
     func findPositionForFillPolicy(_ item: Item) -> Position {
         let columnsHeight = getHeights()[items.count - 1]
 
@@ -118,7 +114,7 @@ extension Matrix {
     func getPosition(for itemIndex: Int) -> Position {
         guard let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == itemIndex }) }),
               let columnIndex = items[rowIndex].firstIndex(where: { $0.index == itemIndex })
-        else { return .init(row: 0, column: 0) }
+        else { return .zero }
 
         return .init(row: rowIndex, column: columnIndex)
     }

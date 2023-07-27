@@ -25,5 +25,11 @@ extension Matrix.Position {
 
 // MARK: - Helpers
 extension Matrix.Position {
+    func nextRow() -> Self { .init(row: row + 1, column: 0) }
+    func nextColumn() -> Self { .init(row: row, column: column + 1) }
+}
+
+// MARK: - Objects
+extension Matrix.Position {
     static var zero: Self { .init(row: 0, column: 0) }
 }
