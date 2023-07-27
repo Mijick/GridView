@@ -12,7 +12,7 @@ import SwiftUI
 
 struct AnyGridElement: GridElement {
     let columns: Int
-    private var _body: AnyView
+    private let _body: AnyView
 
 
     var body: some View { _body }

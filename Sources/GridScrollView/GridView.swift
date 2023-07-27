@@ -13,7 +13,7 @@ import SwiftUI
 public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
-    @State private var matrix: Matrix = .init(columns: 3, itemsSpacing: 8, policy: .ordered)
+    @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .ordered)
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) {
@@ -47,19 +47,19 @@ private extension GridView {
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         insertItem(index, dimensions.height)
 
-        let position = matrix.getPosition(for: index)
+        let range = matrix.getRange(for: index)
 
 
-        if position.row == 0 {
+        if range.start.row == 0 {
             return 0
         }
 
 
-        let range = matrix.getRange(for: position)
 
 
 
-        let topPadding = -(matrix.getHeights()[position.row - 1][range].max() ?? 0)
+
+        let topPadding = -(matrix.getHeights()[range.start.row - 1][range.columns].max() ?? 0)
 
 
         return topPadding

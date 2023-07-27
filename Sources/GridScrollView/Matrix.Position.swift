@@ -10,7 +10,20 @@
 
 import SwiftUI
 
-extension Matrix { struct Position {
-    var row: Int
-    var column: Int
+extension Matrix { struct Position: Equatable, Comparable {
+    let row: Int
+    let column: Int
 }}
+
+// MARK: - Comparable
+extension Matrix.Position {
+    static func < (lhs: Matrix.Position, rhs: Matrix.Position) -> Bool {
+        if lhs.row == rhs.row { return lhs.column < rhs.column }
+        return lhs.row < rhs.row
+    }
+}
+
+// MARK: - Helpers
+extension Matrix.Position {
+    static var zero: Self { .init(row: 0, column: 0) }
+}

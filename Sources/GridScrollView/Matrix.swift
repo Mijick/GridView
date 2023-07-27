@@ -19,12 +19,7 @@ struct Matrix {
 }
 
 extension Matrix {
-    func getRange(for position: Position) -> Range<Int> {
-        let startColumn = getPosition(for: items[position].index).column
-        let endColumn = startColumn + items[position].columns
 
-        return startColumn..<endColumn
-    }
 }
 
 // MARK: - Inserting Items
@@ -48,6 +43,10 @@ private extension Matrix {
         items.insertEmptyRow(numberOfColumns: numberOfColumns)
     }}
     mutating func insertItem(_ item: Item, _ position: Position) {
+        
+
+
+
         if position.row > 0 {
             for column in position.column..<position.column + item.columns {
 
@@ -81,30 +80,18 @@ private extension Matrix {
 }
 private extension Matrix {
     func findPositionForOrderedPolicy(_ item: Item) -> Position {
-        let index = item.index
+        if item.index == 0 { return .zero }
+
+        let previousItemRange = getRange(for: item.index - 1)
+
+        if canItemBeInsertedInThisRow(item, previousItemRange) { return .init(row: previousItemRange.start.row, column: previousItemRange.end.column + 1) }
+
+        return .init(row: previousItemRange.start.row + 1, column: 0)
 
 
-
-
-
-        if index == 0 { return .init(row: 0, column: 0) }
-
-
-
-
-
-
-
-        let previousPosition = getPosition(for: index - 1)
-        let prevCOlumns = items[previousPosition].columns
-
-
-        let previousColMax = previousPosition.column + prevCOlumns - 1
-
-
-        if previousPosition.column + prevCOlumns + item.columns > numberOfColumns { return .init(row: previousPosition.row + 1, column: 0) }
-
-        return .init(row: previousPosition.row, column: previousColMax + 1)
+        func canItemBeInsertedInThisRow(_ item: Item, _ previousItemRange: Range) -> Bool {
+            item.columns + previousItemRange.end.column < numberOfColumns
+        }
     }
     func findPositionForFillPolicy(_ item: Item) -> Position {
         let columnsHeight = getHeights()[items.count - 1]
@@ -117,6 +104,17 @@ private extension Matrix {
 
 // MARK: - Getting Index Position
 extension Matrix {
+    func getRange(for index: Int) -> Range {
+        let startPosition = getPosition(for: index)
+
+        let endPositionRow = startPosition.row,
+            endPositionColumn = startPosition.column + items[startPosition].columns - 1
+
+        let endPosition = Position(row: endPositionRow, column: endPositionColumn)
+        return .init(from: startPosition, to: endPosition)
+    }
+
+
     func getPosition(for itemIndex: Int) -> Position {
         guard let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == itemIndex }) }),
               let columnIndex = items[rowIndex].firstIndex(where: { $0.index == itemIndex })
