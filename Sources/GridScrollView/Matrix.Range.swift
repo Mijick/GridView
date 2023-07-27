@@ -13,17 +13,14 @@ import SwiftUI
 extension Matrix { struct Range {
     let start: Position
     let end: Position
-}}
 
-// MARK: - Initialiser
-extension Matrix.Range {
     init(from startPosition: Matrix.Position, to endPosition: Matrix.Position) {
         if startPosition > endPosition { fatalError("Start position must precede end position") }
 
         start = startPosition
         end = endPosition
     }
-}
+}}
 
 // MARK: - Helpers
 extension Matrix.Range {

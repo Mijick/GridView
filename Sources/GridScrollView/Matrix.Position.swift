@@ -23,10 +23,21 @@ extension Matrix.Position {
     }
 }
 
+// MARK: + Range
+extension Matrix.Position {
+    func createItemRange(_ item: Matrix.Item) -> Matrix.Range { .init(from: self, to: withColumn(column + item.columns - 1)) }
+}
+
 // MARK: - Helpers
 extension Matrix.Position {
-    func nextRow() -> Self { .init(row: row + 1, column: 0) }
-    func nextColumn() -> Self { .init(row: row, column: column + 1) }
+    func withRow(_ rowIndex: Int) -> Self { .init(row: rowIndex, column: column) }
+    func withColumn(_ columnIndex: Int) -> Self { .init(row: row, column: columnIndex) }
+
+    func nextRow() -> Self { withRow(row + 1) }
+    func nextColumn() -> Self { withColumn(column + 1) }
+
+    func previousRow() -> Self { withRow(row - 1) }
+    func previousColumn() -> Self { withColumn(column - 1) }
 }
 
 // MARK: - Objects

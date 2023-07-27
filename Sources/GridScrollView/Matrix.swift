@@ -26,9 +26,10 @@ extension Matrix {
 extension Matrix {
     mutating func insert(_ item: Item) { if canItemBeInserted(item) {
         let position = findPositionForItem(item)
+        let range = position.createItemRange(item)
 
         addNewRowIfNeeded(position)
-        insertItem(item, position)
+        insertItem(item, range)
     }}
 }
 private extension Matrix {
@@ -42,49 +43,38 @@ private extension Matrix {
     mutating func addNewRowIfNeeded(_ position: Position) { if position.row >= items.count {
         items.insertEmptyRow(numberOfColumns: numberOfColumns)
     }}
-    mutating func insertItem(_ item: Item, _ position: Position) {
-        
+    mutating func insertItem(_ item: Item, _ range: Range) {
+        let columnHeight = getHeights()
 
-
-
-        if position.row > 0 {
-            for column in position.column..<position.column + item.columns {
-
-                //if item.index == 14 { Swift.print(getColumnsHeight(upToRow: position.row)) }
-
-
-
-
-                // tu jest jakiś problem z diff
-
-                let heights = getHeights()
-
-
-                let diff = (heights[position.row][column]) - (heights[position.row - 1][column]) - itemsSpacing * CGFloat(position.row)
-                let position = Position(row: position.row - 1, column: column)
-                if diff > 0 && items[position].isEmpty {
-                    
-
-
-
-
-                    items[position] = .init(index: -1, value: abs(diff), columns: 1)
-                }
-            }
-        }
-
-        for column in position.column..<position.column + item.columns {
-            items[Position(row: position.row, column: column)] = item
-        }
+        fillInMatrixWithEmptySpaces(range, columnHeight)
+        fillInMatrixWithItem(item, range)
     }
 }
+private extension Matrix {
+    mutating func fillInMatrixWithEmptySpaces(_ range: Range, _ columnHeights: [[CGFloat]]) { if range.start.row > 0 {
+        range.columns.forEach { column in
+            let currentPosition = range.start.withColumn(column), previousPosition = range.start.previousRow()
+            let difference = columnHeights[currentPosition] - columnHeights[previousPosition]
+
+            if difference > 0 && items[previousPosition].isEmpty {
+                items[previousPosition] = .init(index: -1, value: difference, columns: 1)
+            }
+        }
+    }}
+    mutating func fillInMatrixWithItem(_ item: Item, _ range: Range) { range.columns.forEach { column in
+        items[range.start.withColumn(column)] = item
+    }}
+}
+
+
+
 private extension Matrix {
     func findPositionForOrderedPolicy(_ item: Item) -> Position {
         guard item.index > 0 else { return .zero }
 
         let previousItemRangeEnd = getRange(for: item.index - 1).end
         return canInsertItemInRow(item, previousItemRangeEnd) ?
-            previousItemRangeEnd.nextColumn() : previousItemRangeEnd.nextRow()
+            previousItemRangeEnd.nextColumn() : previousItemRangeEnd.nextRow().withColumn(0)
     }
     func canInsertItemInRow(_ item: Item, _ previousItemRangeEnd: Position) -> Bool { item.columns + previousItemRangeEnd.column < numberOfColumns }
 }
@@ -102,12 +92,7 @@ private extension Matrix {
 extension Matrix {
     func getRange(for index: Int) -> Range {
         let startPosition = getPosition(for: index)
-
-        let endPositionRow = startPosition.row,
-            endPositionColumn = startPosition.column + items[startPosition].columns - 1
-
-        let endPosition = Position(row: endPositionRow, column: endPositionColumn)
-        return .init(from: startPosition, to: endPosition)
+        return startPosition.createItemRange(items[startPosition])
     }
 
 
@@ -211,4 +196,8 @@ extension [[CGFloat]] {
             Swift.print(text)
         }
     }
+
+
+
+    subscript(position: Matrix.Position) -> CGFloat { self[position.row][position.column] }
 }
