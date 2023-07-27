@@ -109,48 +109,32 @@ extension Matrix {
         for row in 0..<items.count {
             for column in 0..<numberOfColumns {
                 let iteratorPosition = Position(row: row, column: column)
-
-                // znajdź item, który leży na pozycji
                 let item = items[iteratorPosition]
-                let itemStartPosition = getStartPosition(for: item.index)
 
-
-
-                // uaktualnij wysokość dla itema na danej pozycji
-                updateValueForCurrentPosition(iteratorPosition, &array)
-
-
-
-                // jeśli ostatnia kolumna danego przedmiotu, to uaktualnij wartość
-                let itemRange = itemStartPosition.createItemRange(item)
-                if itemRange.end.column == column {
-                    let max = array[row][itemRange.columns].max() ?? 0
-                    for columna in itemRange.columns {
-                        array[row][columna] = max
-
-                    }
-                }
-
-
+                updateValueForCurrentPosition(iteratorPosition, item, &array)
+                updateValuesForMultigridItem(iteratorPosition, item, &array)
             }
         }
-
-        array.print()
-
-
 
         return array
     }
 }
 private extension Matrix {
-    func updateValueForCurrentPosition(_ position: Position, _ array: inout [[CGFloat]]) {
-        let itemsSpacingValue = items[position].index == -1 ? 0 : itemsSpacing
-
-        let currentValue = items[position].value + itemsSpacingValue
+    func updateValueForCurrentPosition(_ position: Position, _ item: Item, _ array: inout [[CGFloat]]) {
+        let itemsSpacingValue = item.index == -1 ? 0 : itemsSpacing
+        let currentValue = item.value + itemsSpacingValue
         let previousRowPositionValue = position.row > 0 ? array[position.previousRow()] : 0
 
         array[position] = currentValue + previousRowPositionValue
     }
+    func updateValuesForMultigridItem(_ position: Position, _ item: Item, _ array: inout [[CGFloat]]) { if item.columns > 1 {
+        let range = getStartPosition(for: item.index).createItemRange(item)
+
+        guard range.end.column == position.column else { return }
+
+        let maxValue = array[position.row][range.columns].max() ?? 0
+        range.columns.forEach { array[position.row][$0] = maxValue }
+    }}
 }
 
 // MARK: - Others
