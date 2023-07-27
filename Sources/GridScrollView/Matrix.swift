@@ -113,20 +113,16 @@ extension Matrix {
                 // znajdź item, który leży na pozycji
                 let item = items[iteratorPosition]
                 let itemStartPosition = getStartPosition(for: item.index)
-                let itemRange = itemStartPosition.createItemRange(item)
-                let itemValue = getItemValue(itemStartPosition)
-
 
 
 
                 // uaktualnij wysokość dla itema na danej pozycji
-                let previousRowPositionValue = row > 0 ? array[iteratorPosition.previousRow()] : 0
-                array[iteratorPosition] = previousRowPositionValue + itemValue
+                updateValueForCurrentPosition(iteratorPosition, &array)
 
 
 
                 // jeśli ostatnia kolumna danego przedmiotu, to uaktualnij wartość
-
+                let itemRange = itemStartPosition.createItemRange(item)
                 if itemRange.end.column == column {
                     let max = array[row][itemRange.columns].max() ?? 0
                     for columna in itemRange.columns {
@@ -147,23 +143,14 @@ extension Matrix {
     }
 }
 private extension Matrix {
-    func getItemValue(_ position: Position) -> CGFloat {
-        let itemValue = items[position].value
+    func updateValueForCurrentPosition(_ position: Position, _ array: inout [[CGFloat]]) {
+        let itemsSpacingValue = items[position].index == -1 ? 0 : itemsSpacing
 
-        if items[position].index == -1 { return itemValue }
+        let currentValue = items[position].value + itemsSpacingValue
+        let previousRowPositionValue = position.row > 0 ? array[position.previousRow()] : 0
 
-
-
-
-        return itemValue + itemsSpacing
+        array[position] = currentValue + previousRowPositionValue
     }
-    func getEndItemColumn(_ row: Int) -> Int {
-        let item = items[row][0]
-        let startPosition = getStartPosition(for: item.index)
-        let range = startPosition.createItemRange(item)
-        return range.end.column
-    }
-
 }
 
 // MARK: - Others
