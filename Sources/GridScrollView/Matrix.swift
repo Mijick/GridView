@@ -89,12 +89,12 @@ private extension Matrix {
 // MARK: - Getting Item Position
 extension Matrix {
     func getRange(for index: Int) -> Range {
-        let startPosition = getPosition(for: index)
+        let startPosition = getStartPosition(for: index)
         return startPosition.createItemRange(items[startPosition])
     }
 }
 private extension Matrix {
-    func getPosition(for index: Int) -> Position {
+    func getStartPosition(for index: Int) -> Position {
         let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == index }) }) ?? 0
         let columnIndex = items[rowIndex].firstIndex(where: { $0.index == index }) ?? 0
         return .init(row: rowIndex, column: columnIndex)
@@ -106,34 +106,35 @@ extension Matrix {
     func getHeights() -> [[CGFloat]] {
         var array: [[CGFloat]] = .init(repeating: .init(repeating: 0, count: numberOfColumns), count: items.count)
 
-        for rowIndex in 0..<items.count {
-            for columnIndex in 0..<numberOfColumns {
-                let item = items[rowIndex][columnIndex]
-                let position = getPosition(for: item.index)
+        for row in 0..<items.count {
+            for column in 0..<numberOfColumns {
+                let position = Position(row: row, column: column)
 
-                let range = position.column..<position.column + item.columns // zmienić potem, bo nie będzie działąć
-                let value = getItemValue(position)
-
-
-                let previousVal = rowIndex > 0 ? array[rowIndex - 1][columnIndex] : 0
+                let item = items[position]
+                let startPosition = getStartPosition(for: item.index)
+                let range = startPosition.createItemRange(item)
+                let value = getItemValue(startPosition)
 
 
-                
+                let previousVal = row > 0 ? array[position.previousRow()] : 0
 
-                array[rowIndex][columnIndex] = previousVal + value
+                array[position] = previousVal + value
 
 
-                let max = array[rowIndex][range].max() ?? 0
+                let max = array[row][range.columns].max() ?? 0
 
-                //if item.columns > 1 && colu
 
-                if position.column + (item.columns - 1) == columnIndex && item.columns > 1 {
-                    for columna in Swift.max(position.column, columnIndex - item.columns - 1)...columnIndex {
-                        array[rowIndex][columna] = max
+                if range.end.column == column && item.columns > 1 {
+                    for columna in Swift.max(startPosition.column, column - item.columns - 1)...column {
+                        array[row][columna] = max
 
                     }
                 }
 
+
+
+
+                // Dla item musi być max
 
 
             }
@@ -195,5 +196,8 @@ extension [[CGFloat]] {
 
 
 
-    subscript(position: Matrix.Position) -> CGFloat { self[position.row][position.column] }
+    subscript(position: Matrix.Position) -> CGFloat {
+        get { self[position.row][position.column] }
+        set { self[position.row][position.column] = newValue }
+    }
 }
