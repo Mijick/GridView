@@ -18,10 +18,6 @@ struct Matrix {
     init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
-extension Matrix {
-
-}
-
 // MARK: - Inserting Items
 extension Matrix {
     mutating func insert(_ item: Item) { if canItemBeInserted(item) {
@@ -50,13 +46,14 @@ private extension Matrix {
         fillInMatrixWithItem(item, range)
     }
 }
+// MARK: Filling Array
 private extension Matrix {
     mutating func fillInMatrixWithEmptySpaces(_ range: Range, _ columnHeights: [[CGFloat]]) { if range.start.row > 0 {
         range.columns.forEach { column in
-            let currentPosition = range.start.withColumn(column), previousPosition = range.start.previousRow()
+            let currentPosition = range.start.withColumn(column), previousPosition = currentPosition.previousRow()
             let difference = columnHeights[currentPosition] - columnHeights[previousPosition]
 
-            if difference > 0 && items[previousPosition].isEmpty {
+            if shouldFillInEmptySpace(difference, items[previousPosition]) {
                 items[previousPosition] = .init(index: -1, value: difference, columns: 1)
             }
         }
@@ -65,9 +62,10 @@ private extension Matrix {
         items[range.start.withColumn(column)] = item
     }}
 }
-
-
-
+private extension Matrix {
+    func shouldFillInEmptySpace(_ difference: CGFloat, _ item: Item) -> Bool { difference > 0 && item.isEmpty }
+}
+// MARK: Finding Positions
 private extension Matrix {
     func findPositionForOrderedPolicy(_ item: Item) -> Position {
         guard item.index > 0 else { return .zero }
@@ -88,19 +86,17 @@ private extension Matrix {
     }
 }
 
-// MARK: - Getting Index Position
+// MARK: - Getting Item Position
 extension Matrix {
     func getRange(for index: Int) -> Range {
         let startPosition = getPosition(for: index)
         return startPosition.createItemRange(items[startPosition])
     }
-
-
-    func getPosition(for itemIndex: Int) -> Position {
-        guard let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == itemIndex }) }),
-              let columnIndex = items[rowIndex].firstIndex(where: { $0.index == itemIndex })
-        else { return .zero }
-
+}
+private extension Matrix {
+    func getPosition(for index: Int) -> Position {
+        let rowIndex = items.firstIndex(where: { $0.contains(where: { $0.index == index }) }) ?? 0
+        let columnIndex = items[rowIndex].firstIndex(where: { $0.index == index }) ?? 0
         return .init(row: rowIndex, column: columnIndex)
     }
 }
