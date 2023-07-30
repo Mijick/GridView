@@ -14,10 +14,12 @@ public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
     @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .ordered)
+    @State private var heights: [CGFloat] = []
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) {
-        data.forEach { elements.append(.init(content($0))) }
+        elements = data.map { .init(content($0)) }
+        _heights = .init(initialValue: .init(repeating: 0, count: data.upperBound))
     }
     public var body: some View { ScrollView(content: createContent) }
 }
@@ -35,10 +37,17 @@ private extension GridView {
 private extension GridView {
     func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
         elements[index]
-            .frame(maxWidth: .infinity)
+            .readHeight { saveHeight($0, index) }
             .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
-            .frame(width: calculateItemWidth(index, reader.size.width))
+            .frame(width: calculateItemWidth(index, reader.size.width), height: heights[index])
+    }
+}
+
+// MARK: - Reading Height
+private extension GridView {
+    func saveHeight(_ value: CGFloat, _ index: Int) {
+        heights[index] = value
     }
 }
 

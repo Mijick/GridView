@@ -20,16 +20,15 @@ struct Matrix {
 
 // MARK: - Inserting Items
 extension Matrix {
-    mutating func insert(_ item: Item) { if canItemBeInserted(item) {
+    mutating func insert(_ item: Item) {
         let position = findPositionForItem(item)
         let range = position.createItemRange(item)
 
         addNewRowIfNeeded(position)
         insertItem(item, range)
-    }}
+    }
 }
 private extension Matrix {
-    func canItemBeInserted(_ item: Item) -> Bool { !items.flatMap { $0 }.contains(item) }
     func findPositionForItem(_ item: Item) -> Position {
         switch policy {
             case .ordered: return findPositionForOrderedPolicy(item)

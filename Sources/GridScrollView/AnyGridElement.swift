@@ -18,6 +18,6 @@ struct AnyGridElement: GridElement {
     var body: some View { _body }
     init(_ element: some GridElement) {
         self.columns = element.columns
-        self._body = AnyView(element.body)
+        self._body = AnyView(element)
     }
 }
