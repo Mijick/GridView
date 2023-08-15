@@ -14,15 +14,146 @@ struct Matrix {
     private(set) var items: [[Item]]
     private let policy: MatrixInsertionPolicy
     private let itemsSpacing: CGFloat
+    private var aaa: Bool = false
 
     init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
+
+extension [[Matrix.Item]] {
+    func minimalHeight() -> [Matrix.Item] {
+        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
+
+
+    }
+    func contains(_ element: Matrix.Item) -> Bool {
+        joined().contains(where: { $0.index == element.index })
+    }
+
+    func printujKurwa() {
+        self.forEach { item in
+            var uu = ""
+            item.forEach { uu += " \($0.index)" }
+            Swift.print(uu)
+        }
+
+        Swift.print("\n\n")
+    }
+
+
+}
+extension [Matrix.Item] {
+    func valueDiff() -> CGFloat {
+        // różnica między min a max
+
+
+        let min = self.min(by: { $0.value < $1.value })?.value ?? 0
+        let max = self.max(by: { $0.value > $1.value })?.value ?? 0
+
+
+        return max - min
+    }
+}
+
+
 // MARK: - Inserting Items
 extension Matrix {
+    mutating func a() {
+        let items = getUniqueItems()
+
+
+        var array: [[Item]] = []
+        for item1 in items.reversed() {
+            guard !array.contains(item1) else { continue }
+
+            var localArray: [[Item]] = []
+            var loca = [item1]
+
+            for item2 in items {
+                guard !array.contains(item2) else { continue }
+                guard item1 != item2 else { continue }
+
+                let sum = loca.reduce(0, { $0 + $1.columns })
+
+                if sum + item2.columns <= numberOfColumns { loca.append(item2) }
+                else { localArray.append(loca); loca = [] }
+            }
+
+            if !loca.isEmpty { localArray.append(loca) }
+
+
+
+            array.append(localArray.minimalHeight())
+        }
+
+
+        //array.printujKurwa()
+
+
+
+        self.items = .init(numberOfColumns: numberOfColumns)
+
+
+        for row in 0..<array.count {
+            for column in 0..<array[row].count {
+                let addColumn = column > 0 ? array[row][column - 1].columns - 1 : 0
+
+
+                let position = Position(row: row, column: column + addColumn)
+                let item = array[position]
+                let range = position.createItemRange(item)
+
+                //print(position, item.index)
+
+
+                addNewRowIfNeeded(position)
+                insertItem(item, range)
+            }
+        }
+
+
+        self.items.printujKurwa()
+
+
+        aaa = true
+
+        //array.printujKurwa()
+
+        //self.items = array
+
+
+    }
+
+    func getUniqueItems() -> [Item] {
+        let nonEmptyItems = items
+            .flatMap { $0 }
+            .filter { $0.index != -1 }
+        let items = Array(Set(nonEmptyItems))
+
+        let sortedItems = items.sorted(by: { $0.columns > $1.columns })
+        return sortedItems
+    }
+
+
+
+
+
     mutating func insert(_ item: Item) {
+        guard !aaa else { return }
+
+
+
         let position = findPositionForItem(item)
         let range = position.createItemRange(item)
+
+        
+
+
+
+
+
+
+
 
         addNewRowIfNeeded(position)
         insertItem(item, range)

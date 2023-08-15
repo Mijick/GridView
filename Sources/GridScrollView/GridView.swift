@@ -52,6 +52,9 @@ private extension GridView {
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         insertItem(index, dimensions.height)
 
+        
+
+
         let topPadding = getTopPaddingValue(index)
         return topPadding
     }
@@ -60,6 +63,10 @@ private extension GridView {
     func insertItem(_ index: Int, _ value: CGFloat) { DispatchQueue.main.async {
         let item = Matrix.Item(index: index, value: value, columns: elements[index].columns)
         matrix.insert(item)
+
+        if index == elements.count - 1 {
+            matrix.a()
+        }
     }}
     func getTopPaddingValue(_ index: Int) -> CGFloat {
         let range = matrix.getRange(for: index)
