@@ -12,6 +12,7 @@ import SwiftUI
 
 struct AnyGridElement: GridElement {
     let columns: Int
+    @State var height: CGFloat = 0
     private let _body: AnyView
 
 
