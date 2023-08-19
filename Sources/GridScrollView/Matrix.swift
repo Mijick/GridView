@@ -253,17 +253,5 @@ extension [Matrix.Item] {
     }
 
 
-    mutating func pickBetter(_ value: [Matrix.Item]) {
-        if isEmpty { self = value }
-
-        let items = [self, value]
-        let bestValue = items.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
-
-        self = bestValue
-    }
-
-
-
-
     var columns: Int { reduce(0, { $0 + $1.columns }) }
 }
