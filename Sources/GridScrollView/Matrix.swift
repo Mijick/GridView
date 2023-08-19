@@ -90,8 +90,8 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems where !array.contains(item1) {
-            var bestColumn: [[Item]] = []
-            var proposedColumn = [item1]
+            var bestRow: [Item] = []
+            var proposedRow = [item1]
 
 
             let remainingItems = getRemainingItems(array, sortedItems, item1)
@@ -104,15 +104,20 @@ private extension Matrix {
 
             for item2 in remainingItems {
 
-                if proposedColumn.columns + item2.columns <= numberOfColumns { proposedColumn.append(item2) }
-                else { bestColumn.append(proposedColumn); proposedColumn = [] }
+
+
+                if proposedRow.columns + item2.columns <= numberOfColumns { proposedRow.append(item2) }
+                else {
+
+                    bestRow.pickBetter(proposedRow)
+                    proposedRow = []
+                }
+
+
             }
 
-            if !proposedColumn.isEmpty { bestColumn.append(proposedColumn) }
-
-
-
-            array.append(bestColumn.minimalHeight())
+            bestRow.pickBetter(proposedRow)
+            array.append(bestRow)
         }
 
         self.items = .init(numberOfColumns: numberOfColumns)
@@ -238,25 +243,26 @@ fileprivate extension [[CGFloat]] {
 
 
 extension [[Matrix.Item]] {
-    func minimalHeight() -> [Matrix.Item] {
-        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
-
-
-    }
     func contains(_ element: Matrix.Item) -> Bool {
         joined().contains(where: { $0.index == element.index })
     }
 }
 extension [Matrix.Item] {
     func valueDiff() -> CGFloat {
-        // różnica między min a max
-
-
         let min = self.min(by: { $0.value < $1.value })?.value ?? 0
         let max = self.max(by: { $0.value > $1.value })?.value ?? 0
 
-
         return max - min
+    }
+
+
+    mutating func pickBetter(_ value: [Matrix.Item]) {
+        if isEmpty { self = value }
+
+        let items = [self, value]
+        let bestValue = items.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
+
+        self = bestValue
     }
 
 
