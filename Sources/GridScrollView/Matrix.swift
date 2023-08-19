@@ -109,8 +109,6 @@ private extension Matrix {
 
 
             for item2 in nw {
-                if item1.columns == numberOfColumns { break }
-
                 let sum = loca.reduce(0, { $0 + $1.columns })
 
 
