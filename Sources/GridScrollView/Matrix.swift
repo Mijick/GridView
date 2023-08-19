@@ -84,13 +84,12 @@ private extension Matrix {
 // MARK: Sorting Matrix
 private extension Matrix {
     mutating func sortMatrix(_ isLastItem: Bool) { if policy == .fill && isLastItem {
-        let items = getUniqueItems()
-        let sortedItems = getSortedItems(items)
+        let items = getUniqueSortedItems()
 
 
         var array: [[Item]] = []
-        for item1 in sortedItems where !array.contains(item1) {
-            let bestRow = calculateBestRow(array, sortedItems, item1)
+        for item1 in items where !array.contains(item1) {
+            let bestRow = calculateBestRow(array, items, item1)
             array.append(bestRow)
         }
 
@@ -121,15 +120,12 @@ private extension Matrix {
     }}
 }
 private extension Matrix {
-    func getUniqueItems() -> [Item] {
-        let nonEmptyItems = items
-            .flatMap { $0 }
-            .filter { $0.index != -1 }
-        let items = Array(Set(nonEmptyItems))
-        return items
-    }
-    func getSortedItems(_ items: [Item]) -> [Item] {
-        items.sorted(by: { $0.columns > $1.columns })
+    func getUniqueSortedItems() -> [Item] { items
+        .flatMap { $0 }
+        .filter { $0.index != -1 }
+        .removingDuplicates()
+        .sorted(by: { $0.index < $1.index })
+        .sorted(by: { $0.columns > $1.columns })
     }
     func calculateBestRow(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Matrix.Item] {
         var proposedRows = [[item1]]
@@ -262,4 +258,11 @@ extension [Matrix.Item] {
 
 
     var columns: Int { reduce(0, { $0 + $1.columns }) }
+}
+
+
+
+
+extension Array where Element: Hashable {
+    func removingDuplicates() -> Self { Array(Set(self)) }
 }
