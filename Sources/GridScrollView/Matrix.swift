@@ -95,17 +95,21 @@ private extension Matrix {
             var loca = [item1]
 
 
-            let nw = items.filter { $0.columns + item1.columns <= numberOfColumns }
+            let nw = u()
+
+
+            func u() -> [Item] {
+                items
+                    .filter { $0.columns + item1.columns <= numberOfColumns }
+                    .filter { !array.contains($0) }
+                    .filter { item1 != $0 }
+            }
 
 
 
 
             for item2 in nw {
                 if item1.columns == numberOfColumns { break }
-
-
-                guard !array.contains(item2) else { continue }
-                guard item1 != item2 else { continue }
 
                 let sum = loca.reduce(0, { $0 + $1.columns })
 
