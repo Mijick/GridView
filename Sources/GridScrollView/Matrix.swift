@@ -14,39 +14,46 @@ struct Matrix {
     private(set) var items: [[Item]]
     private let policy: MatrixInsertionPolicy
     private let itemsSpacing: CGFloat
-    private var aaa: Bool = false
+    private var matrixInitialised: Bool = false
 
 
     init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
-
-extension [[Matrix.Item]] {
-    func minimalHeight() -> [Matrix.Item] {
-        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
-
-
-    }
-    func contains(_ element: Matrix.Item) -> Bool {
-        joined().contains(where: { $0.index == element.index })
-    }
-}
-extension [Matrix.Item] {
-    func valueDiff() -> CGFloat {
-        // różnica między min a max
-
-
-        let min = self.min(by: { $0.value < $1.value })?.value ?? 0
-        let max = self.max(by: { $0.value > $1.value })?.value ?? 0
-
-
-        return max - min
-    }
-}
-
-
 // MARK: - Inserting Items
 extension Matrix {
+    mutating func insert(_ item: Item, isLast: Bool) {
+
+
+
+        guard !matrixInitialised else { return }
+
+
+
+        let position = findPositionForItem(item)
+        let range = position.createItemRange(item)
+
+
+
+
+
+
+
+
+
+
+        addNewRowIfNeeded(position)
+        insertItem(item, range)
+
+
+
+        if isLast { a() }
+    }
+
+
+
+
+
     private mutating func a() {
         guard policy == .fill else { return }
 
@@ -109,7 +116,7 @@ extension Matrix {
         }
 
 
-        aaa = true
+        matrixInitialised = true
     }
 
     func getUniqueItems() -> [Item] {
@@ -126,33 +133,7 @@ extension Matrix {
 
 
 
-    mutating func insert(_ item: Item, isLast: Bool) {
 
-
-
-        guard !aaa else { return }
-
-
-
-        let position = findPositionForItem(item)
-        let range = position.createItemRange(item)
-
-        
-
-
-
-
-
-
-
-
-        addNewRowIfNeeded(position)
-        insertItem(item, range)
-
-
-
-        if isLast { a() }
-    }
 }
 private extension Matrix {
     func findPositionForItem(_ item: Item) -> Position {
@@ -280,5 +261,33 @@ fileprivate extension [[CGFloat]] {
     subscript(position: Matrix.Position) -> CGFloat {
         get { self[position.row][position.column] }
         set { self[position.row][position.column] = newValue }
+    }
+}
+
+
+
+
+
+
+extension [[Matrix.Item]] {
+    func minimalHeight() -> [Matrix.Item] {
+        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
+
+
+    }
+    func contains(_ element: Matrix.Item) -> Bool {
+        joined().contains(where: { $0.index == element.index })
+    }
+}
+extension [Matrix.Item] {
+    func valueDiff() -> CGFloat {
+        // różnica między min a max
+
+
+        let min = self.min(by: { $0.value < $1.value })?.value ?? 0
+        let max = self.max(by: { $0.value > $1.value })?.value ?? 0
+
+
+        return max - min
     }
 }
