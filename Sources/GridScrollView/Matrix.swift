@@ -90,8 +90,8 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems where !array.contains(item1) {
-            var localArray: [[Item]] = []
-            var loca = [item1]
+            var bestColumn: [[Item]] = []
+            var proposedColumn = [item1]
 
 
             let remainingItems = getRemainingItems(array, sortedItems, item1)
@@ -104,15 +104,15 @@ private extension Matrix {
 
             for item2 in remainingItems {
 
-                if loca.columns + item2.columns <= numberOfColumns { loca.append(item2) }
-                else { localArray.append(loca); loca = [] }
+                if proposedColumn.columns + item2.columns <= numberOfColumns { proposedColumn.append(item2) }
+                else { bestColumn.append(proposedColumn); proposedColumn = [] }
             }
 
-            if !loca.isEmpty { localArray.append(loca) }
+            if !proposedColumn.isEmpty { bestColumn.append(proposedColumn) }
 
 
 
-            array.append(localArray.minimalHeight())
+            array.append(bestColumn.minimalHeight())
         }
 
         self.items = .init(numberOfColumns: numberOfColumns)
