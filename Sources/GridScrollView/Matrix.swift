@@ -89,18 +89,7 @@ private extension Matrix {
 
 // MARK: Sorting Matrix
 private extension Matrix {
-    mutating func sortMatrix() {
-        guard policy == .fill else { return }
-
-
-
-        // wstaw wszystkie elementy do tablicy byle jak
-        // weź tablicę
-        // posortuj odpowiednio
-        // włóż do tablicy
-        // ustaw znacznik "skończone"
-
-
+    mutating func sortMatrix() { if policy == .fill {
         let items = getUniqueItems()
 
 
@@ -139,26 +128,17 @@ private extension Matrix {
             array.append(localArray.minimalHeight())
         }
 
-
-        array.printujKurwa()
-
         self.items = .init(numberOfColumns: numberOfColumns)
 
 
         for row in 0..<array.count {
             for column in 0..<array[row].count {
-                
+
                 var columnA = 0
 
-                for index in 0..<column { 
+                for index in 0..<column {
                     columnA += array[row][index].columns
                 }
-
-
-
-                let addColumn = column > 0 ? array[row][column - 1].columns - 1 : 0
-
-                // wszystkie kolumny trzeba zsumować
 
 
                 let position = Position(row: row, column: columnA)
@@ -169,10 +149,7 @@ private extension Matrix {
                 insertItem(item, range)
             }
         }
-
-
-        //self.items.printujKurwa()
-    }
+    }}
 }
 private extension Matrix {
     func getUniqueItems() -> [Item] {
@@ -271,16 +248,6 @@ extension [[Matrix.Item]] {
     }
     func contains(_ element: Matrix.Item) -> Bool {
         joined().contains(where: { $0.index == element.index })
-    }
-
-    func printujKurwa() {
-        self.forEach { item in
-            var uu = ""
-            item.forEach { uu += " \($0.index)" }
-            Swift.print(uu)
-        }
-
-        Swift.print("\n\n")
     }
 }
 extension [Matrix.Item] {
