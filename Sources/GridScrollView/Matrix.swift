@@ -103,11 +103,8 @@ private extension Matrix {
 
 
             for item2 in remainingItems {
-                let sum = loca.reduce(0, { $0 + $1.columns })
 
-
-
-                if sum + item2.columns <= numberOfColumns { loca.append(item2) }
+                if loca.columns + item2.columns <= numberOfColumns { loca.append(item2) }
                 else { localArray.append(loca); loca = [] }
             }
 
@@ -261,4 +258,9 @@ extension [Matrix.Item] {
 
         return max - min
     }
+
+
+
+
+    var columns: Int { reduce(0, { $0 + $1.columns }) }
 }
