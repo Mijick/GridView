@@ -90,7 +90,7 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems {
-            guard !array.contains(item1) else { continue }
+            if array.contains(item1) { continue }
 
             var localArray: [[Item]] = []
             var loca = [item1]
