@@ -22,14 +22,7 @@ struct Matrix {
 
 // MARK: - Inserting Items
 extension Matrix {
-    mutating func insert(_ item: Item, isLast: Bool) {
-
-
-
-        guard !matrixInitialised else { return }
-
-
-
+    mutating func insert(_ item: Item, isLast: Bool) { if !matrixInitialised {
         let position = findPositionForItem(item)
         let range = position.createItemRange(item)
 
@@ -47,8 +40,11 @@ extension Matrix {
 
 
 
-        if isLast { a() }
-    }
+        if isLast {
+            a()
+            matrixInitialised = true
+        }
+    }}
 
 
 
@@ -114,9 +110,6 @@ extension Matrix {
                 insertItem(item, range)
             }
         }
-
-
-        matrixInitialised = true
     }
 
     func getUniqueItems() -> [Item] {
