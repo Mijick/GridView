@@ -90,17 +90,8 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems where !array.contains(item1) {
-            var proposedRows = [[item1]]
-
-
-            let remainingItems = getRemainingItems(array, sortedItems, item1)
-
-
-            for item2 in remainingItems {
-                if proposedRows.lastItem.columns + item2.columns <= numberOfColumns { proposedRows.lastItem.append(item2) }
-                else { proposedRows.append([]) }
-            }
-            array.append(proposedRows.g())
+            let bestRow = calculateBestRow(array, sortedItems, item1)
+            array.append(bestRow)
         }
 
         self.items = .init(numberOfColumns: numberOfColumns)
@@ -140,6 +131,23 @@ private extension Matrix {
     func getSortedItems(_ items: [Item]) -> [Item] {
         items.sorted(by: { $0.columns > $1.columns })
     }
+    func calculateBestRow(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Matrix.Item] {
+        var proposedRows = [[item1]]
+        
+        for item2 in getRemainingItems(results, items, item1) {
+            switch proposedRows.lastItem.columns + item2.columns <= numberOfColumns {
+                case true: proposedRows.lastItem.append(item2)
+                case false: proposedRows.append([])
+            }
+        }
+
+        return proposedRows.pickingBest()
+    }
+
+
+
+}
+private extension Matrix {
     func getRemainingItems(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Item] {
         items
             .filter { $0.columns + item1.columns <= numberOfColumns }
@@ -238,7 +246,7 @@ extension [[Matrix.Item]] {
     }
 
 
-    func g() -> [Matrix.Item] {
+    func pickingBest() -> [Matrix.Item] {
         self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
     }
 
