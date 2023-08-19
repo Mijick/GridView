@@ -90,17 +90,17 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems where !array.contains(item1) {
-            var aaa = [[item1]]
+            var proposedRows = [[item1]]
 
 
             let remainingItems = getRemainingItems(array, sortedItems, item1)
 
 
             for item2 in remainingItems {
-                if aaa.lastItem.columns + item2.columns <= numberOfColumns { aaa.lastItem.append(item2) }
-                else { aaa.append([]) }
+                if proposedRows.lastItem.columns + item2.columns <= numberOfColumns { proposedRows.lastItem.append(item2) }
+                else { proposedRows.append([]) }
             }
-            array.append(aaa.g())
+            array.append(proposedRows.g())
         }
 
         self.items = .init(numberOfColumns: numberOfColumns)
