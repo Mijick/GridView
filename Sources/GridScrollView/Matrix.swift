@@ -85,30 +85,26 @@ private extension Matrix {
 private extension Matrix {
     mutating func sortMatrix(_ isLastItem: Bool) { if policy == .fill && isLastItem {
         let items = getUniqueItems()
+        let sortedItems = getSortedItems(items)
 
 
         var array: [[Item]] = []
-        for item1 in items {
+        for item1 in sortedItems {
             guard !array.contains(item1) else { continue }
 
             var localArray: [[Item]] = []
             var loca = [item1]
 
 
-            let nw = u()
-
-
-            func u() -> [Item] {
-                items
-                    .filter { $0.columns + item1.columns <= numberOfColumns }
-                    .filter { !array.contains($0) }
-                    .filter { item1 != $0 }
-            }
+            let remainingItems = getRemainingItems(array, sortedItems, item1)
 
 
 
 
-            for item2 in nw {
+
+
+
+            for item2 in remainingItems {
                 let sum = loca.reduce(0, { $0 + $1.columns })
 
 
@@ -156,9 +152,16 @@ private extension Matrix {
             .flatMap { $0 }
             .filter { $0.index != -1 }
         let items = Array(Set(nonEmptyItems))
-
-        let sortedItems = items.sorted(by: { $0.columns > $1.columns })
-        return sortedItems
+        return items
+    }
+    func getSortedItems(_ items: [Item]) -> [Item] {
+        items.sorted(by: { $0.columns > $1.columns })
+    }
+    func getRemainingItems(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Item] {
+        items
+            .filter { $0.columns + item1.columns <= numberOfColumns }
+            .filter { !results.contains($0) }
+            .filter { item1 != $0 }
     }
 }
 
