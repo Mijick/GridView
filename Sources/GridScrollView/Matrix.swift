@@ -28,13 +28,7 @@ extension Matrix {
 
         addNewRowIfNeeded(position)
         insertItem(item, range)
-
-
-
-        if isLast {
-            sortMatrix()
-            matrixInitialised = true
-        }
+        sortMatrix(isLast)
     }}
 }
 
@@ -89,7 +83,7 @@ private extension Matrix {
 
 // MARK: Sorting Matrix
 private extension Matrix {
-    mutating func sortMatrix() { if policy == .fill {
+    mutating func sortMatrix(_ isLastItem: Bool) { if policy == .fill && isLastItem {
         let items = getUniqueItems()
 
 
@@ -149,6 +143,9 @@ private extension Matrix {
                 insertItem(item, range)
             }
         }
+
+
+        matrixInitialised = true
     }}
 }
 private extension Matrix {
