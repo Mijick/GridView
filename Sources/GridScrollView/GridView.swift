@@ -14,6 +14,7 @@ public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
     @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .ordered)
+    @State private var abc: Bool = false
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) { elements = data.map { .init(content($0)) } }
@@ -64,8 +65,9 @@ private extension GridView {
         let item = Matrix.Item(index: index, value: value, columns: elements[index].columns)
         matrix.insert(item)
 
-        if index == elements.count - 1 {
+        if index == elements.count - 1 && !abc {
             matrix.a()
+            abc = true
         }
     }}
     func getTopPaddingValue(_ index: Int) -> CGFloat {
