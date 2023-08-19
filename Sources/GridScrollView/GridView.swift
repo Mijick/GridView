@@ -13,7 +13,7 @@ import SwiftUI
 public struct GridView: View {
     var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
-    @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .ordered)
+    @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)
 
 
     public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) { elements = data.map { .init(content($0)) } }

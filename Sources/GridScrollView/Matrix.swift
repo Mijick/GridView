@@ -105,17 +105,28 @@ private extension Matrix {
 
 
         var array: [[Item]] = []
-        for item1 in items.reversed() {
+        for item1 in items {
             guard !array.contains(item1) else { continue }
 
             var localArray: [[Item]] = []
             var loca = [item1]
 
-            for item2 in items {
+
+            let nw = items.filter { $0.columns + item1.columns <= numberOfColumns }
+
+
+
+
+            for item2 in nw {
+                if item1.columns == numberOfColumns { break }
+
+
                 guard !array.contains(item2) else { continue }
                 guard item1 != item2 else { continue }
 
                 let sum = loca.reduce(0, { $0 + $1.columns })
+
+
 
                 if sum + item2.columns <= numberOfColumns { loca.append(item2) }
                 else { localArray.append(loca); loca = [] }
@@ -129,23 +140,38 @@ private extension Matrix {
         }
 
 
+        array.printujKurwa()
 
         self.items = .init(numberOfColumns: numberOfColumns)
 
 
         for row in 0..<array.count {
             for column in 0..<array[row].count {
+                
+                var columnA = 0
+
+                for index in 0..<column { 
+                    columnA += array[row][index].columns
+                }
+
+
+
                 let addColumn = column > 0 ? array[row][column - 1].columns - 1 : 0
 
+                // wszystkie kolumny trzeba zsumować
 
-                let position = Position(row: row, column: column + addColumn)
-                let item = array[position]
+
+                let position = Position(row: row, column: columnA)
+                let item = array[row][column]
                 let range = position.createItemRange(item)
 
                 addNewRowIfNeeded(position)
                 insertItem(item, range)
             }
         }
+
+
+        //self.items.printujKurwa()
     }
 }
 private extension Matrix {
@@ -245,6 +271,16 @@ extension [[Matrix.Item]] {
     }
     func contains(_ element: Matrix.Item) -> Bool {
         joined().contains(where: { $0.index == element.index })
+    }
+
+    func printujKurwa() {
+        self.forEach { item in
+            var uu = ""
+            item.forEach { uu += " \($0.index)" }
+            Swift.print(uu)
+        }
+
+        Swift.print("\n\n")
     }
 }
 extension [Matrix.Item] {
