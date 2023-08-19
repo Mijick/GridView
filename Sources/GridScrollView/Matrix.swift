@@ -48,8 +48,7 @@ extension [Matrix.Item] {
 // MARK: - Inserting Items
 extension Matrix {
     private mutating func a() {
-        // tylko w przypadku a
-
+        guard policy == .fill else { return }
 
 
 
@@ -103,9 +102,6 @@ extension Matrix {
                 let position = Position(row: row, column: column + addColumn)
                 let item = array[position]
                 let range = position.createItemRange(item)
-
-                //print(position, item.index)
-
 
                 addNewRowIfNeeded(position)
                 insertItem(item, range)
