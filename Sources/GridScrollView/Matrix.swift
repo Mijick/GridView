@@ -16,7 +16,7 @@ struct Matrix {
     private let itemsSpacing: CGFloat
     private var aaa: Bool = false
 
-    // weź liczbę przedmiotów
+
     init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
@@ -30,18 +30,6 @@ extension [[Matrix.Item]] {
     func contains(_ element: Matrix.Item) -> Bool {
         joined().contains(where: { $0.index == element.index })
     }
-
-    func printujKurwa() {
-        self.forEach { item in
-            var uu = ""
-            item.forEach { uu += " \($0.index)" }
-            Swift.print(uu)
-        }
-
-        Swift.print("\n\n")
-    }
-
-
 }
 extension [Matrix.Item] {
     func valueDiff() -> CGFloat {
@@ -70,8 +58,6 @@ extension Matrix {
         // posortuj odpowiednio
         // włóż do tablicy
         // ustaw znacznik "skończone"
-
-        //guard !aaa else { return }
 
 
         let items = getUniqueItems()
@@ -127,16 +113,7 @@ extension Matrix {
         }
 
 
-        self.items.printujKurwa()
-
-
         aaa = true
-
-        //array.printujKurwa()
-
-        //self.items = array
-
-
     }
 
     func getUniqueItems() -> [Item] {
@@ -154,7 +131,7 @@ extension Matrix {
 
 
     mutating func insert(_ item: Item, isLast: Bool) {
-        // ma działać tylko raz
+
 
 
         guard !aaa else { return }
