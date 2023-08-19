@@ -59,14 +59,19 @@ extension [Matrix.Item] {
 
 // MARK: - Inserting Items
 extension Matrix {
-    mutating func a() {
+    private mutating func a() {
+        // tylko w przypadku a
+
+
+
+
         // wstaw wszystkie elementy do tablicy byle jak
         // weź tablicę
         // posortuj odpowiednio
         // włóż do tablicy
         // ustaw znacznik "skończone"
 
-        guard !aaa else { return }
+        //guard !aaa else { return }
 
 
         let items = getUniqueItems()
@@ -148,7 +153,7 @@ extension Matrix {
 
 
 
-    mutating func insert(_ item: Item) {
+    mutating func insert(_ item: Item, isLast: Bool) {
         // ma działać tylko raz
 
 
@@ -170,6 +175,10 @@ extension Matrix {
 
         addNewRowIfNeeded(position)
         insertItem(item, range)
+
+
+
+        if isLast { a() }
     }
 }
 private extension Matrix {
