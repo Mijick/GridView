@@ -16,6 +16,7 @@ struct Matrix {
     private let itemsSpacing: CGFloat
     private var aaa: Bool = false
 
+    // weź liczbę przedmiotów
     init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
@@ -59,6 +60,15 @@ extension [Matrix.Item] {
 // MARK: - Inserting Items
 extension Matrix {
     mutating func a() {
+        // wstaw wszystkie elementy do tablicy byle jak
+        // weź tablicę
+        // posortuj odpowiednio
+        // włóż do tablicy
+        // ustaw znacznik "skończone"
+
+        guard !aaa else { return }
+
+
         let items = getUniqueItems()
 
 
@@ -139,6 +149,9 @@ extension Matrix {
 
 
     mutating func insert(_ item: Item) {
+        // ma działać tylko raz
+
+
         guard !aaa else { return }
 
 
