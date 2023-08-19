@@ -90,34 +90,17 @@ private extension Matrix {
 
         var array: [[Item]] = []
         for item1 in sortedItems where !array.contains(item1) {
-            var bestRow: [Item] = []
-            var proposedRow = [item1]
+            var aaa = [[item1]]
 
 
             let remainingItems = getRemainingItems(array, sortedItems, item1)
 
 
-
-
-
-
-
             for item2 in remainingItems {
-
-
-
-                if proposedRow.columns + item2.columns <= numberOfColumns { proposedRow.append(item2) }
-                else {
-
-                    bestRow.pickBetter(proposedRow)
-                    proposedRow = []
-                }
-
-
+                if aaa.lastItem.columns + item2.columns <= numberOfColumns { aaa.lastItem.append(item2) }
+                else { aaa.append([]) }
             }
-
-            bestRow.pickBetter(proposedRow)
-            array.append(bestRow)
+            array.append(aaa.g())
         }
 
         self.items = .init(numberOfColumns: numberOfColumns)
@@ -246,6 +229,20 @@ extension [[Matrix.Item]] {
     func contains(_ element: Matrix.Item) -> Bool {
         joined().contains(where: { $0.index == element.index })
     }
+
+
+
+    var lastItem: [Matrix.Item] {
+        get { last ?? [] }
+        set { self[count - 1] = newValue }
+    }
+
+
+    func g() -> [Matrix.Item] {
+        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
+    }
+
+
 }
 extension [Matrix.Item] {
     func valueDiff() -> CGFloat {
