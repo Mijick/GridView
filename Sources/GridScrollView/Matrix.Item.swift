@@ -10,18 +10,13 @@
 
 import SwiftUI
 
-extension Matrix { struct Item: Equatable, Hashable {
+extension Matrix { struct Item {
     var index: Int
     var value: CGFloat
     var columns: Int
 }}
-extension Matrix.Item {
-    static func ==(lhs: Self, rhs: Self) -> Bool { lhs.index == rhs.index }
-}
-extension Matrix.Item {
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(index)
-    }
+extension Matrix.Item: Hashable {
+    func hash(into hasher: inout Hasher) { hasher.combine(index) }
 }
 extension Matrix.Item {
     var isEmpty: Bool { value == 0 }
