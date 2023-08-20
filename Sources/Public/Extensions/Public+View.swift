@@ -1,5 +1,5 @@
 //
-//  GridElement.swift of MijickGridView
+//  Public+View.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -11,9 +11,6 @@
 
 import SwiftUI
 
-public protocol GridElement: View {
-    var columns: Int { get }
-}
-public extension GridElement {
-    var columns: Int { 1 }
+public extension View {
+    func columns(_ value: Int) -> some GridElement { AnyGridElement(self, numberOfColumns: value) }
 }

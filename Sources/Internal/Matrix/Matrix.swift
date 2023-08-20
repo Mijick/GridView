@@ -215,7 +215,7 @@ private extension Matrix {
 // MARK: - Others
 extension Matrix {
     var itemsSpacing: CGFloat { config.spacing.vertical }
-    var policy: MatrixInsertionPolicy { config.insertionPolicy }
+    var policy: InsertionPolicy { config.insertionPolicy }
     var numberOfColumns: Int { config.numberOfColumns }
 }
 

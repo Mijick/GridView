@@ -1,5 +1,5 @@
 //
-//  GridViewConfig.swift of MijickGridView
+//  Public+GridViewConfig.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -13,7 +13,7 @@ import SwiftUI
 
 // MARK: - Policies
 public extension GridView.Config {
-    func insertionPolicy(_ value: MatrixInsertionPolicy) -> Self { changing(path: \.insertionPolicy, to: value) }
+    func insertionPolicy(_ value: InsertionPolicy) -> Self { changing(path: \.insertionPolicy, to: value) }
 }
 
 // MARK: - Composition
@@ -26,7 +26,7 @@ public extension GridView.Config {
 
 // MARK: - Internal
 extension GridView { public struct Config: Configurable { public init() {}
-    private(set) var insertionPolicy: MatrixInsertionPolicy = .ordered
+    private(set) var insertionPolicy: InsertionPolicy = .ordered
 
     private(set) var numberOfColumns: Int = 2
     private(set) var spacing: (vertical: CGFloat, horizontal: CGFloat) = (8, 8)

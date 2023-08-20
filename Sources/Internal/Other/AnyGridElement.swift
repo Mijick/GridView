@@ -12,14 +12,20 @@
 import SwiftUI
 
 struct AnyGridElement: GridElement {
-    let columns: Int
     @State var height: CGFloat? = nil
+    let columns: Int
     private let _body: AnyView
 
 
     var body: some View { _body }
-    init(_ element: some GridElement) {
-        self.columns = element.columns
+    init(_ element: some View, numberOfColumns: Int? = nil) {
+        self.columns = Self.getNumberOfColumns(element, numberOfColumns)
         self._body = AnyView(element)
+    }
+}
+private extension AnyGridElement {
+    static func getNumberOfColumns(_ element: some View, _ numberOfColumns: Int?) -> Int {
+        if let element = element as? any GridElement { return element.columns }
+        return numberOfColumns ?? 1
     }
 }
