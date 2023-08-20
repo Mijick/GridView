@@ -1,5 +1,5 @@
 //
-//  View++.swift of GridScrollView Demo
+//  HeightReader.swift of GridScrollView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

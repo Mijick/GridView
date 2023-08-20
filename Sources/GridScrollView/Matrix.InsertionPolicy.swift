@@ -8,4 +8,4 @@
 //  Copyright ©2023 Mijick. Licensed under MIT License.
 
 
-enum MatrixInsertionPolicy { case ordered, fill }
+extension Matrix { public enum InsertionPolicy { case ordered, fill } }
