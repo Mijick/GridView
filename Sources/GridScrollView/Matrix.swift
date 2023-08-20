@@ -88,29 +88,8 @@ private extension Matrix {
         let proposedSortedMatrix = getProposedSortedMatrix(items)
 
         eraseTemporaryMatrix()
-
-
-        for row in 0..<proposedSortedMatrix.count {
-            for column in 0..<proposedSortedMatrix[row].count {
-
-                var columnA = 0
-
-                for index in 0..<column {
-                    columnA += proposedSortedMatrix[row][index].columns
-                }
-
-
-                let position = Position(row: row, column: columnA)
-                let item = proposedSortedMatrix[row][column]
-                let range = position.createItemRange(item)
-
-                addNewRowIfNeeded(position)
-                insertItem(item, range)
-            }
-        }
-
-
-        matrixInitialised = true
+        insertSortedMatrix(proposedSortedMatrix)
+        setMatrixAsInitialised()
     }}
 }
 private extension Matrix {
@@ -134,14 +113,24 @@ private extension Matrix {
     mutating func eraseTemporaryMatrix() {
         items = .init(numberOfColumns: numberOfColumns)
     }
+    mutating func insertSortedMatrix(_ proposedSortedMatrix: [[Item]]) {
+        for row in 0..<proposedSortedMatrix.count {
+            for column in 0..<proposedSortedMatrix[row].count {
+                let columns = (0..<column).reduce(0, { $0 + proposedSortedMatrix[row][$1].columns })
 
 
+                let position = Position(row: row, column: columns)
+                let item = proposedSortedMatrix[row][column]
+                let range = position.createItemRange(item)
 
-
-
-
-
-
+                addNewRowIfNeeded(position)
+                insertItem(item, range)
+            }
+        }
+    }
+    mutating func setMatrixAsInitialised() {
+        matrixInitialised = true
+    }
 }
 private extension Matrix {
     func getBestRow(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Matrix.Item] {
