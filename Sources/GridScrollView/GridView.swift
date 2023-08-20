@@ -10,21 +10,22 @@
 
 import SwiftUI
 
+// MARK: - Initialisers
+extension GridView {
+    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement, configBuilder: (Config) -> Config) {
+        elements = data.map { .init(content($0)) }
+        _config = .init(initialValue: configBuilder(.init()))
+        _matrix = .init(initialValue: .init(configBuilder(.init())))
+    }
+}
+
+// MARK: - Implementation
 public struct GridView: View {
     var elements: [AnyGridElement] = []
     @State private var config: Config
     @State private var matrix: Matrix
 
 
-    // MARK: - Initialisers
-    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement, configBuilder: (Config) -> Config) {
-        elements = data.map { .init(content($0)) }
-        _config = .init(initialValue: configBuilder(.init()))
-        _matrix = .init(initialValue: .init(configBuilder(.init())))
-    }
-    
-
-    // MARK: - Body
     public var body: some View {
         GeometryReader { reader in
             ZStack(alignment: .topLeading) {
@@ -34,7 +35,6 @@ public struct GridView: View {
         .frame(height: calculateContentHeight())
     }
 }
-
 private extension GridView {
     func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
         elements[index]
