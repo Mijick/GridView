@@ -1,5 +1,5 @@
 //
-//  HeightReader.swift of GridView
+//  HeightReader.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

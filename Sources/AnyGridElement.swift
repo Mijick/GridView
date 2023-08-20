@@ -1,5 +1,5 @@
 //
-//  AnyGridElement.swift of GridView
+//  AnyGridElement.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

@@ -1,5 +1,5 @@
 //
-//  Int++.swift of GridView
+//  Int++.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

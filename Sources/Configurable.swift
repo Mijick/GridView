@@ -1,5 +1,5 @@
 //
-//  Configurable.swift of GridView
+//  Configurable.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

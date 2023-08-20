@@ -1,5 +1,5 @@
 //
-//  MatrixInsertionPolicy.swift of GridView
+//  MatrixInsertionPolicy.swift of MijickGridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
