@@ -25,10 +25,18 @@ extension Matrix {
         let position = findPositionForItem(item)
         let range = position.createItemRange(item)
 
+        checkItem(item)
         addNewRowIfNeeded(position)
         insertItem(item, range)
         sortMatrix(isLast)
     }}
+}
+
+// MARK: Checking Item
+private extension Matrix {
+    func checkItem(_ item: Item) {
+        if item.columns > config.numberOfColumns { fatalError("Single element cannot have more columns than the entire view.") }
+    }
 }
 
 // MARK: Finding Position
