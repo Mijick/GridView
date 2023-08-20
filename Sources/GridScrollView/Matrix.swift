@@ -11,13 +11,12 @@
 import SwiftUI
 
 struct Matrix {
-    private(set) var items: [[Item]]
-    private let policy: Matrix.InsertionPolicy
-    private let itemsSpacing: CGFloat
+    let config: GridView.Config
+    private var items: [[Item]] = []
     private var matrixInitialised: Bool = false
 
 
-    init(columns: Int, itemsSpacing: CGFloat, policy: Matrix.InsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
+    init(_ config: GridView.Config) { self.items = .init(numberOfColumns: config.numberOfColumns); self.config = config }
 }
 
 // MARK: - Inserting Items
@@ -206,7 +205,9 @@ private extension Matrix {
 
 // MARK: - Others
 extension Matrix {
-    var numberOfColumns: Int { items.first?.count ?? 0 }
+    var itemsSpacing: CGFloat { config.spacing.vertical }
+    var policy: MatrixInsertionPolicy { config.insertionPolicy }
+    var numberOfColumns: Int { config.numberOfColumns }
 }
 
 

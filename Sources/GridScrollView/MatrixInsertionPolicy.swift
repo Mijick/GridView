@@ -1,5 +1,5 @@
 //
-//  Matrix.InsertionPolicy.swift of GridScrollView
+//  MatrixInsertionPolicy.swift of GridScrollView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -8,4 +8,4 @@
 //  Copyright ©2023 Mijick. Licensed under MIT License.
 
 
-extension Matrix { public enum InsertionPolicy { case ordered, fill } }
+public enum MatrixInsertionPolicy { case ordered, fill }
