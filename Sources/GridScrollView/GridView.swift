@@ -11,17 +11,21 @@
 import SwiftUI
 
 public struct GridView: View {
-    var horizontalSpacing: CGFloat = 8
     var elements: [AnyGridElement] = []
-    @State private var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)
+    @State private var config: Config
+    @State private var matrix: Matrix
 
 
-    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement) { elements = data.map { .init(content($0)) } }
-    public var body: some View { ScrollView(content: createContent) }
-}
+    // MARK: - Initialisers
+    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement, configBuilder: (Config) -> Config) {
+        elements = data.map { .init(content($0)) }
+        _config = .init(initialValue: configBuilder(.init()))
+        _matrix = .init(initialValue: .init(configBuilder(.init())))
+    }
+    
 
-private extension GridView {
-    func createContent() -> some View {
+    // MARK: - Body
+    public var body: some View {
         GeometryReader { reader in
             ZStack(alignment: .topLeading) {
                 ForEach(0..<elements.count, id: \.self) { createItem($0, reader) }
@@ -30,6 +34,7 @@ private extension GridView {
         .frame(height: calculateContentHeight())
     }
 }
+
 private extension GridView {
     func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
         elements[index]
@@ -51,9 +56,6 @@ private extension GridView {
 private extension GridView {
     func handleTopAlignmentGuide(_ index: Int, _ dimensions: ViewDimensions, _ reader: GeometryProxy) -> CGFloat {
         insertItem(index, dimensions.height)
-
-        
-
 
         let topPadding = getTopPaddingValue(index)
         return topPadding
@@ -89,7 +91,7 @@ private extension GridView {
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
         let rawColumnsPaddingValue = singleColumnWidth * columnNumber.toCGFloat()
-        let rawSpacingPaddingValue = (columnNumber.toCGFloat() - 1) * horizontalSpacing
+        let rawSpacingPaddingValue = (columnNumber.toCGFloat() - 1) * config.spacing.horizontal
 
         let rawPaddingValue = rawColumnsPaddingValue + rawSpacingPaddingValue
         return -rawPaddingValue
@@ -103,7 +105,7 @@ private extension GridView {
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
         let fixedItemWidth = singleColumnWidth * itemColumns.toCGFloat()
-        let additionalHorizontalSpacing = (itemColumns.toCGFloat() - 1) * horizontalSpacing
+        let additionalHorizontalSpacing = (itemColumns.toCGFloat() - 1) * config.spacing.horizontal
         return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateContentHeight() -> CGFloat { matrix.getHeights().flatMap { $0 }.max() ?? 0 }
@@ -116,6 +118,6 @@ private extension GridView {
     }
     func getHorizontalSpacingTotalValue() -> CGFloat {
         let numberOfSpaces = matrix.numberOfColumns - 1
-        return numberOfSpaces.toCGFloat() * horizontalSpacing
+        return numberOfSpaces.toCGFloat() * config.spacing.horizontal
     }
 }
