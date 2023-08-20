@@ -12,12 +12,12 @@ import SwiftUI
 
 struct Matrix {
     private(set) var items: [[Item]]
-    private let policy: MatrixInsertionPolicy
+    private let policy: Matrix.InsertionPolicy
     private let itemsSpacing: CGFloat
     private var matrixInitialised: Bool = false
 
 
-    init(columns: Int, itemsSpacing: CGFloat, policy: MatrixInsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
+    init(columns: Int, itemsSpacing: CGFloat, policy: Matrix.InsertionPolicy) { self.items = .init(numberOfColumns: columns); self.itemsSpacing = itemsSpacing; self.policy = policy }
 }
 
 // MARK: - Inserting Items
