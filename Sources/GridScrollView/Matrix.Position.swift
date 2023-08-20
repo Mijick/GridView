@@ -10,20 +10,18 @@
 
 import SwiftUI
 
-extension Matrix { struct Position: Equatable, Comparable {
+extension Matrix { struct Position {
     let row: Int
     let column: Int
 }}
-
-// MARK: - Comparable
-extension Matrix.Position {
+extension Matrix.Position: Comparable {
     static func < (lhs: Matrix.Position, rhs: Matrix.Position) -> Bool {
         if lhs.row == rhs.row { return lhs.column < rhs.column }
         return lhs.row < rhs.row
     }
 }
 
-// MARK: + Range
+// MARK: - Creating Item Range
 extension Matrix.Position {
     func createItemRange(_ item: Matrix.Item) -> Matrix.Range { .init(from: self, to: withColumn(column + item.columns - 1)) }
 }
