@@ -116,10 +116,9 @@ private extension Matrix {
     mutating func insertSortedMatrix(_ proposedSortedMatrix: [[Item]]) {
         for row in 0..<proposedSortedMatrix.count {
             for column in 0..<proposedSortedMatrix[row].count {
-                let columns = (0..<column).reduce(0, { $0 + proposedSortedMatrix[row][$1].columns })
+                let positionColumn = (0..<column).reduce(0, { $0 + proposedSortedMatrix[row][$1].columns })
 
-
-                let position = Position(row: row, column: columns)
+                let position = Position(row: row, column: positionColumn)
                 let item = proposedSortedMatrix[row][column]
                 let range = position.createItemRange(item)
 
