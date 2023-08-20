@@ -146,11 +146,10 @@ private extension Matrix {
     }
 }
 private extension Matrix {
-    func getRemainingItems(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Item] {
-        items
-            .filter { $0.columns + item1.columns <= numberOfColumns }
-            .filter { !results.contains($0) }
-            .filter { item1 != $0 }
+    func getRemainingItems(_ results: [[Item]], _ items: [Item], _ item1: Item) -> [Item] { items
+        .filter { $0.columns + item1.columns <= numberOfColumns }
+        .filter { !results.contains($0) }
+        .filter { item1 != $0 }
     }
 }
 
@@ -260,11 +259,4 @@ extension [Matrix.Item] {
 
 
     var columns: Int { reduce(0, { $0 + $1.columns }) }
-}
-
-
-
-
-extension Array where Element: Hashable {
-    func removingDuplicates() -> Self { Array(Set(self)) }
 }

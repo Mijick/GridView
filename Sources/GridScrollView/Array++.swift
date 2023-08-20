@@ -10,6 +10,12 @@
 
 import SwiftUI
 
+// MARK: - Hashable
+extension Array where Element: Hashable {
+    func removingDuplicates() -> Self { Array(Set(self)) }
+}
+
+// MARK: - [CGFloat]
 extension [[CGFloat]] {
     func print() {
         Swift.print("\n\n")
