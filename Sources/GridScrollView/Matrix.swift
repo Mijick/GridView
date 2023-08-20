@@ -215,48 +215,33 @@ fileprivate extension [[Matrix.Item]] {
     init(numberOfColumns: Int) { self = [.empty(numberOfColumns)] }
     mutating func insertEmptyRow(numberOfColumns: Int) { append(.empty(numberOfColumns)) }
 }
-fileprivate extension [Matrix.Item] {
-    static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0, columns: 1), count: numberOfColumns) }
+fileprivate extension [[Matrix.Item]] {
+    func contains(_ element: Matrix.Item) -> Bool { joined().contains(where: { $0.index == element.index }) }
+    func pickingBest() -> [Matrix.Item] { self.min(by: { $0.heightsDifference < $1.heightsDifference }) ?? [] }
 }
-fileprivate extension [[CGFloat]] {
-    subscript(position: Matrix.Position) -> CGFloat {
-        get { self[position.row][position.column] }
-        set { self[position.row][position.column] = newValue }
-    }
-}
-
-
-
-
-
-
-extension [[Matrix.Item]] {
-    func contains(_ element: Matrix.Item) -> Bool {
-        joined().contains(where: { $0.index == element.index })
-    }
-
-
-
+fileprivate extension [[Matrix.Item]] {
     var lastItem: [Matrix.Item] {
         get { last ?? [] }
         set { self[count - 1] = newValue }
     }
-
-
-    func pickingBest() -> [Matrix.Item] {
-        self.min(by: { $0.valueDiff() < $1.valueDiff() }) ?? []
-    }
-
-
 }
-extension [Matrix.Item] {
-    func valueDiff() -> CGFloat {
+
+fileprivate extension [Matrix.Item] {
+    static func empty(_ numberOfColumns: Int) -> Self { .init(repeating: .init(index: -1, value: 0, columns: 1), count: numberOfColumns) }
+}
+fileprivate extension [Matrix.Item] {
+    var heightsDifference: CGFloat {
         let min = self.min(by: { $0.value < $1.value })?.value ?? 0
         let max = self.max(by: { $0.value > $1.value })?.value ?? 0
 
         return max - min
     }
-
-
     var columns: Int { reduce(0, { $0 + $1.columns }) }
+}
+
+fileprivate extension [[CGFloat]] {
+    subscript(position: Matrix.Position) -> CGFloat {
+        get { self[position.row][position.column] }
+        set { self[position.row][position.column] = newValue }
+    }
 }
