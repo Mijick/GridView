@@ -4,15 +4,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "GridView",
+    name: "MijickGridView",
     platforms: [
         .iOS(.v14)
     ],
     products: [
-        .library(name: "GridView", targets: ["GridView"]),
+        .library(name: "MijickGridView", targets: ["MijickGridView"]),
     ],
     targets: [
-        .target(name: "GridView", dependencies: []),
-        .testTarget(name: "GridViewTests", dependencies: ["GridView"])
+        .target(name: "MijickGridView", dependencies: [], path: "Sources"),
+        .testTarget(name: "MijickGridViewTests", dependencies: ["MijickGridView"], path: "Tests")
     ]
 )
