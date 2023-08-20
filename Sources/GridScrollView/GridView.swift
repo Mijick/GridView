@@ -14,16 +14,16 @@ import SwiftUI
 extension GridView {
     public init<Data: RandomAccessCollection, ID: Hashable>(_ data: Data, id: KeyPath<Data.Element, ID>, @ViewBuilder content: @escaping (Data.Element) -> any GridElement, configBuilder: (Config) -> Config) {
         elements = data.map { .init(content($0)) }
-        _config = .init(initialValue: configBuilder(.init()))
+        config = configBuilder(.init())
         _matrix = .init(initialValue: .init(configBuilder(.init())))
     }
 }
 
 // MARK: - Implementation
 public struct GridView: View {
-    var elements: [AnyGridElement] = []
-    @State private var config: Config
     @State private var matrix: Matrix
+    private var elements: [AnyGridElement]
+    private var config: Config
 
 
     public var body: some View {
