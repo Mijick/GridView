@@ -1,5 +1,5 @@
 //
-//  Matrix_Test.swift of GridScrollView
+//  Matrix_Test.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
@@ -9,7 +9,7 @@
 
 
 import XCTest
-@testable import GridScrollView
+@testable import GridView
 
 final class Matrix_Test: XCTestCase {
     var matrix: Matrix = .init(columns: 4, itemsSpacing: 8, policy: .fill)

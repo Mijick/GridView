@@ -1,5 +1,5 @@
 //
-//  AnyGridElement.swift of GridScrollView
+//  AnyGridElement.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

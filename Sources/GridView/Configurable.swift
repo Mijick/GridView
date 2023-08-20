@@ -1,5 +1,5 @@
 //
-//  Configurable.swift of GridScrollView
+//  Configurable.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

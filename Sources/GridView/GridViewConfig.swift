@@ -1,5 +1,5 @@
 //
-//  GridViewConfig.swift of GridScrollView
+//  GridViewConfig.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

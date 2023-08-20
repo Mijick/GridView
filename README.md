@@ -1,3 +1,3 @@
-# GridScrollView
+# GridView
 
 A description of this package.

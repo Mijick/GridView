@@ -1,5 +1,5 @@
 //
-//  Int++.swift of GridScrollView
+//  Int++.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik

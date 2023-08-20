@@ -1,5 +1,5 @@
 //
-//  Matrix.Item.swift of GridScrollView
+//  Matrix.Item.swift of GridView
 //
 //  Created by Tomasz Kurylik
 //    - Twitter: https://twitter.com/tkurylik
