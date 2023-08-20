@@ -11,20 +11,10 @@
 
 import SwiftUI
 
-// MARK: - Initialisers
-extension GridView {
-    public init<Data: RandomAccessCollection, ID: Hashable>(_ data: Data, id: KeyPath<Data.Element, ID>, @ViewBuilder content: @escaping (Data.Element) -> any GridElement, configBuilder: (Config) -> Config) {
-        elements = data.map { .init(content($0)) }
-        config = configBuilder(.init())
-        _matrix = .init(initialValue: .init(configBuilder(.init())))
-    }
-}
-
-// MARK: - Implementation
 public struct GridView: View {
-    @State private var matrix: Matrix
-    private var elements: [AnyGridElement]
-    private var config: Config
+    @State var matrix: Matrix
+    var elements: [AnyGridElement]
+    var config: Config
 
 
     public var body: some View {
