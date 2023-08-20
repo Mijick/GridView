@@ -12,7 +12,7 @@ import SwiftUI
 
 // MARK: - Initialisers
 extension GridView {
-    public init(_ data: Range<Int>, @ViewBuilder content: @escaping (Int) -> any GridElement, configBuilder: (Config) -> Config) {
+    public init<Data: RandomAccessCollection, ID: Hashable>(_ data: Data, id: KeyPath<Data.Element, ID>, @ViewBuilder content: @escaping (Data.Element) -> any GridElement, configBuilder: (Config) -> Config) {
         elements = data.map { .init(content($0)) }
         _config = .init(initialValue: configBuilder(.init()))
         _matrix = .init(initialValue: .init(configBuilder(.init())))
