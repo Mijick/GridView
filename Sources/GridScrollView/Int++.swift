@@ -11,6 +11,6 @@
 import SwiftUI
 
 extension Int {
-    var doubleValue: Double { Double(self) }
-    var floatValue: CGFloat { CGFloat(self) }
+    func toDouble() -> Double { .init(self) }
+    func toCGFloat() -> CGFloat { .init(self) }
 }

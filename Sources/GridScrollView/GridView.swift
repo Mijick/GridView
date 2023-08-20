@@ -88,8 +88,8 @@ private extension GridView {
         let columnNumber = matrix.getRange(for: index).start.column
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
-        let rawColumnsPaddingValue = singleColumnWidth * columnNumber.floatValue
-        let rawSpacingPaddingValue = (columnNumber.floatValue - 1) * horizontalSpacing
+        let rawColumnsPaddingValue = singleColumnWidth * columnNumber.toCGFloat()
+        let rawSpacingPaddingValue = (columnNumber.toCGFloat() - 1) * horizontalSpacing
 
         let rawPaddingValue = rawColumnsPaddingValue + rawSpacingPaddingValue
         return -rawPaddingValue
@@ -102,8 +102,8 @@ private extension GridView {
         let itemColumns = elements[index].columns
         let singleColumnWidth = calculateSingleColumnWidth(availableWidth)
 
-        let fixedItemWidth = singleColumnWidth * itemColumns.floatValue
-        let additionalHorizontalSpacing = (itemColumns.floatValue - 1) * horizontalSpacing
+        let fixedItemWidth = singleColumnWidth * itemColumns.toCGFloat()
+        let additionalHorizontalSpacing = (itemColumns.toCGFloat() - 1) * horizontalSpacing
         return fixedItemWidth + additionalHorizontalSpacing
     }
     func calculateContentHeight() -> CGFloat { matrix.getHeights().flatMap { $0 }.max() ?? 0 }
@@ -112,10 +112,10 @@ private extension GridView {
     func calculateSingleColumnWidth(_ availableWidth: CGFloat) -> CGFloat {
         let totalSpacingValue = getHorizontalSpacingTotalValue()
         let itemsWidth = availableWidth - totalSpacingValue
-        return itemsWidth / matrix.numberOfColumns.floatValue
+        return itemsWidth / matrix.numberOfColumns.toCGFloat()
     }
     func getHorizontalSpacingTotalValue() -> CGFloat {
         let numberOfSpaces = matrix.numberOfColumns - 1
-        return numberOfSpaces.floatValue * horizontalSpacing
+        return numberOfSpaces.toCGFloat() * horizontalSpacing
     }
 }
