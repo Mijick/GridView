@@ -30,6 +30,7 @@ private extension GridView {
     func createItem(_ index: Int, _ reader: GeometryProxy) -> some View {
         elements[index]
             .readHeight { saveHeight($0, index) }
+            .fixedSize(horizontal: false, vertical: true)
             .alignmentGuide(.top) { handleTopAlignmentGuide(index, $0, reader) }
             .alignmentGuide(.leading) { handleLeadingAlignmentGuide(index, $0, reader) }
             .frame(width: calculateItemWidth(index, reader.size.width), height: elements[index].height)
