@@ -6,7 +6,7 @@
 
 
 <h3 style="font-size: 5em" align="center">
-    Popups presentation made simple
+    Layouts made simple
 </h3>
 
 <p align="center">
