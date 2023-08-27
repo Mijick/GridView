@@ -12,8 +12,8 @@
 import SwiftUI
 
 extension Matrix { struct Range {
-    let start: Position
-    let end: Position
+    var start: Position
+    var end: Position
 
     init(from startPosition: Matrix.Position, to endPosition: Matrix.Position) {
         if startPosition > endPosition { fatalError("Start position must precede end position") }
@@ -22,6 +22,17 @@ extension Matrix { struct Range {
         end = endPosition
     }
 }}
+
+extension Matrix.Range {
+    func updating(newStart: Matrix.Position) -> Matrix.Range {
+        let endIndexOffset = newStart.column + columns.count - 1
+
+        var range = self
+        range.start = newStart
+        range.end = newStart.withColumn(endIndexOffset)
+        return range
+    }
+}
 
 // MARK: - Helpers
 extension Matrix.Range {

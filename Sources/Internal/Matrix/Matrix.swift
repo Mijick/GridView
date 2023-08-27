@@ -63,14 +63,30 @@ private extension Matrix {
 
 // MARK: Filling Array
 private extension Matrix {
-    mutating func insertItem(_ item: Item, _ range: Range) {
+    mutating func insertItem(_ item: Item, _ range: Range, _ isLast: Bool = false) {
         let columnHeight = getHeights()
+        let range = recalculateRange(range, columnHeight, isLast)
 
         fillInMatrixWithEmptySpaces(range, columnHeight)
         fillInMatrixWithItem(item, range)
     }
 }
 private extension Matrix {
+    func recalculateRange(_ range: Range, _ columnHeights: [[CGFloat]], _ isLast: Bool) -> Range {
+        guard isLast, range.end.row > 0 else { return range }
+
+        let columnsRangeStart = range.columns.lowerBound,
+            columnsRangeEnd = config.numberOfColumns - range.columns.count + 1,
+            columnsRange = columnsRangeStart..<columnsRangeEnd
+
+        let columnHeights = columnHeights[range.end.row - 1][columnsRange]
+
+        let localIndex = columnHeights.enumerated().min(by: { $0.element < $1.element })?.offset ?? 0
+        let globalIndex = localIndex + range.columns.lowerBound
+        
+        let newRange = range.updating(newStart: range.start.withColumn(globalIndex))
+        return newRange
+    }
     mutating func fillInMatrixWithEmptySpaces(_ range: Range, _ columnHeights: [[CGFloat]]) { if range.start.row > 0 {
         range.columns.forEach { column in
             let currentPosition = range.start.withColumn(column), previousPosition = currentPosition.previousRow()
@@ -129,9 +145,10 @@ private extension Matrix {
                 let position = Position(row: row, column: positionColumn)
                 let item = proposedSortedMatrix[row][column]
                 let range = position.createItemRange(item)
+                let isLastItem = proposedSortedMatrix.last?.last == item
 
                 addNewRowIfNeeded(position)
-                insertItem(item, range)
+                insertItem(item, range, isLastItem)
             }
         }
     }
