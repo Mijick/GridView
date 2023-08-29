@@ -1,7 +1,7 @@
 <br>
 
 <p align="center">
-   <img alt="GridView Logo" src="https://github.com/Mijick/GridView/assets/23524947/a2a565a2-cc51-4e24-8d77-331e1742784a" width="88%"">
+   <img alt="GridView Logo" src="https://github.com/Mijick/GridView/assets/23524947/a6412ce3-b4a1-4296-94c2-7ca6e9b06cc0" width="88%"">
 </p>
 
 
