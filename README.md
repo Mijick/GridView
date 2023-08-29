@@ -84,9 +84,6 @@ dependencies: [
 To declare a Grid for your data set, call the constructor:
 
 ```Swift
-import SwiftUI
-import MijickGridView
-
 struct ContentView: View {
     private let data = [SomeData]()
 
@@ -98,8 +95,22 @@ struct ContentView: View {
 }
 ```
 
-
 ### 2. Customise Grid
+Your GridView can be customised by calling `configBuilder` inside the initialiser:
+
+```Swift
+struct ContentView: View {
+    private let data = [SomeData]()
+
+    var body: some View {
+        GridView(data, id: \.self, content: SomeView.init, configBuilder: { $0
+            .insertionPolicy(.fill)
+            .columns(4)
+            .verticalSpacing(12)
+        })
+    }
+}
+```
 
 
 ### 3. Declare number of columns
