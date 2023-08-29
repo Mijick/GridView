@@ -83,6 +83,12 @@ dependencies: [
 ### 1. Call initialiser
 
 
+### 2. Customise Grid
+
+
+### 3. Declare number of columns
+
+
 <br>
       
 # Try our demo
