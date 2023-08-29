@@ -89,7 +89,7 @@ struct ContentView: View {
 
     var body: some View {
         GridView(data, id: \.self) { element in
-            SomeView(element)
+            SomeItem(element: element)
         }
     }
 }
@@ -103,7 +103,7 @@ struct ContentView: View {
     private let data = [SomeData]()
 
     var body: some View {
-        GridView(data, id: \.self, content: SomeView.init, configBuilder: { $0
+        GridView(data, id: \.self, content: SomeItem.init, configBuilder: { $0
             .insertionPolicy(.fill)
             .columns(4)
             .verticalSpacing(12)
@@ -114,6 +114,18 @@ struct ContentView: View {
 
 
 ### 3. Declare number of columns
+You can change the number of columns of an item by calling .columns of Item:
+```Swift
+struct ContentView: View { ... }
+struct SomeItem: View {
+    ...
+
+    var body: some View {
+        ...
+            .columns(2)
+    }
+}
+```
 
 
 <br>
