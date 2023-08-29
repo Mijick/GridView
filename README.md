@@ -56,3 +56,33 @@ GridView is a free, and open-source library for SwiftUI that makes creating grid
 * **Designed for SwiftUI.** While developing the library, we have used the power of SwiftUI to give you powerful tool to speed up your implementation process.
 
 <br> 
+
+# Getting Started
+### ✋ Requirements
+
+| **Platforms** | **Minimum Swift Version** |
+|:----------|:----------|
+| iOS 14+ | 5.0 |
+
+### ⏳ Installation
+    
+#### [Swift Package Manager][spm]
+Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the Swift compiler.
+
+Once you have your Swift package set up, adding Navigattie as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+
+```Swift
+dependencies: [
+    .package(url: "https://github.com/Mijick/GridView", branch(“main”))
+]
+``` 
+                      
+<br>
+
+
+
+
+
+
+[MIT]: https://en.wikipedia.org/wiki/MIT_License
+[SPM]: https://www.swift.org/package-manager
