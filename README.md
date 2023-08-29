@@ -43,3 +43,8 @@
     </a>
     <img alt="Made in Kraków" src="https://github.com/Mijick/Navigattie/assets/23524947/f18e87d5-6684-4aa6-9339-757e9b3fd83b"/> 
 </p>
+
+
+<p align="center">
+    <img alt="GridView Examples" src="https://github.com/Mijick/GridView/assets/23524947/d25760d8-6623-4751-bcdd-8250ad3664f4"/>
+</p>
