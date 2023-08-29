@@ -24,7 +24,7 @@
     <img alt="Library in beta version" src="https://github.com/Mijick/Navigattie/assets/23524947/b698aaac-4a91-431b-a7ef-f1dda28304b6"/>
     <img alt="Designed for SwiftUI" src="https://github.com/Mijick/Navigattie/assets/23524947/822de7e5-481e-49c0-b55b-653ac0de86bb"/>
     <img alt="Platforms: iOS" src="https://github.com/Mijick/Navigattie/assets/23524947/58399b94-5fa0-4c29-9013-ba52f6c3b63e"/>
-    <img alt="Release: 0.3.0" src="https://github.com/Mijick/GridView/assets/23524947/73e2265e-140b-433b-a563-32f328a6a1d5"/>
+    <img alt="Release: 0.3.0" src="https://github.com/Mijick/GridView/assets/23524947/27bdac70-ca75-4b58-895a-ae1b3d1729b8"/>
     <a href="https://www.swift.org/package-manager">
         <img alt="Swift Package Manager: Compatible" src="https://github.com/Mijick/Navigattie/assets/23524947/a4876e58-6a26-40c3-97bb-b5e6f69423d9"/>
     </a>
