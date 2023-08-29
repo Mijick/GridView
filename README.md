@@ -81,6 +81,22 @@ dependencies: [
 
 # Usage
 ### 1. Call initialiser
+To declare a Grid for your data set, call the constructor:
+
+```Swift
+import SwiftUI
+import MijickGridView
+
+struct ContentView: View {
+    private let data = [SomeData]()
+
+    var body: some View {
+        GridView(data, id: \.self) { element in
+            SomeView(element)
+        }
+    }
+}
+```
 
 
 ### 2. Customise Grid
