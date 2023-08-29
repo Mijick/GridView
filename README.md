@@ -48,3 +48,11 @@
 <p align="center">
     <img alt="GridView Examples" src="https://github.com/Mijick/GridView/assets/23524947/d25760d8-6623-4751-bcdd-8250ad3664f4"/>
 </p>
+
+<br>
+
+GridView is a free, and open-source library for SwiftUI that makes creating grids easier and much cleaner.
+* **Improves code quality.** Create a grid using `GridView` constructor - simply pass your data and we'll deal with the rest. Simple as never!
+* **Designed for SwiftUI.** While developing the library, we have used the power of SwiftUI to give you powerful tool to speed up your implementation process.
+
+<br> 
