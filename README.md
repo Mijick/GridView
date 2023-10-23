@@ -21,7 +21,6 @@
     <a href="https://github.com/Mijick/GridView-Demo" rel="nofollow">Try demo we prepared</a>
 </p>
 
-
 <br>
 
 <p align="center">
