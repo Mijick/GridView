@@ -70,7 +70,7 @@ GridView is a free, and open-source library for SwiftUI that makes creating grid
 #### [Swift Package Manager][spm]
 Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the Swift compiler.
 
-Once you have your Swift package set up, adding Navigattie as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Once you have your Swift package set up, adding GridView as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
 ```Swift
 dependencies: [
@@ -135,7 +135,7 @@ struct SomeItem: View {
 See for yourself how does it work by cloning [project][Demo] we created
                       
 # License
-Navigattie is released under the MIT license. See [LICENSE][License] for details.
+GridView is released under the MIT license. See [LICENSE][License] for details.
                       
 <br><br>
                       
@@ -143,6 +143,7 @@ Navigattie is released under the MIT license. See [LICENSE][License] for details
 [PopupView] - The most powerful popup library that allows you to present any popup
 <br>
 [Navigattie] - Easier and cleaner way of navigating through your app
+[Timer] - Modern API for Timer
                     
                       
 [MIT]: https://en.wikipedia.org/wiki/MIT_License
@@ -153,3 +154,4 @@ Navigattie is released under the MIT license. See [LICENSE][License] for details
 
 [PopupView]: https://github.com/Mijick/PopupView           
 [Navigattie]: https://github.com/Mijick/Navigattie
+[Timer]: https://github.com/Mijick/Timer
