@@ -143,6 +143,7 @@ GridView is released under the MIT license. See [LICENSE][License] for details.
 [PopupView] - The most powerful popup library that allows you to present any popup
 <br>
 [Navigattie] - Easier and cleaner way of navigating through your app
+<br>
 [Timer] - Modern API for Timer
                     
                       
