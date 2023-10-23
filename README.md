@@ -1,7 +1,11 @@
 <br>
 
 <p align="center">
-   <img alt="GridView Logo" src="https://github.com/Mijick/GridView/assets/23524947/a6412ce3-b4a1-4296-94c2-7ca6e9b06cc0" width="88%"">
+  <picture> 
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Mijick/Assets/blob/main/GridView/Logotype/On%20Dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/Mijick/Assets/blob/main/GridView/Logotype/On%20Light.svg">
+    <img alt="GridView Logo" src="https://github.com/Mijick/Assets/blob/main/GridView/Logotype/On%20Dark.svg" width="76%"">
+  </picture>
 </p>
 
 
