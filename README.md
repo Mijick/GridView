@@ -46,7 +46,7 @@
 
 
 <p align="center">
-    <img alt="GridView Examples" src="https://github.com/Mijick/GridView/assets/23524947/3a2c391e-847f-427b-be76-716ded6a4993"/>
+    <img alt="GridView Examples" src="https://github.com/Mijick/Assets/blob/main/GridView/GIFs/GridView.gif"/>
 </p>
 
 
