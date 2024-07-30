@@ -19,6 +19,10 @@
 
 <p align="center">
     <a href="https://github.com/Mijick/GridView-Demo" rel="nofollow">Try demo we prepared</a>
+    |
+    <a href="https://mijick.notion.site/fb09f0a2efdd4086b81ddbd5b4c1bc55?v=ca8b73e845ab430cb6a17e0faf925172" rel="nofollow">Roadmap</a>
+    |
+    <a href="https://github.com/Mijick/GridView/issues/new" rel="nofollow">Propose a new feature</a>
 </p>
 
 <br>
