@@ -6,7 +6,8 @@ import PackageDescription
 let package = Package(
     name: "MijickGridView",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v14),
+        .macOS(.v10_15)
     ],
     products: [
         .library(name: "MijickGridView", targets: ["MijickGridView"]),
